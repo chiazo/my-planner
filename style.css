@@ -19,16 +19,18 @@ html {
 form {
   display: flex;
   margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
 }
 
-[type="text"],
-button {
+[type="text"], [type="number"],
+button  {
   display: inline-block;
   -webkit-appearance: none;
-  padding: .5rem 1rem;
+  padding: .5rem .5rem;
   font-size: 1rem;
   border: 2px solid #ccc;
   border-radius: 4px;
+  margin: .2rem;
 }
 
 button {
@@ -43,8 +45,19 @@ button {
   width: 100%;
 }
 
+[type="number"] {
+    width: 50%;
+}
+
+li > [type="number"] {
+    width: 20%;
+}
+
 [type="text"]:active,
-[type="text"]:focus {
+[type="text"]:focus,
+[type="number"]:active,
+[type="number"]:focus
+{
   outline: 0;
   border: 2px solid #007bff;
 }

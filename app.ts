@@ -91,10 +91,13 @@ class Model {
 class View {
     app: HTMLElement;
     title: HTMLElement;
-    input: HTMLElement;
+    input: HTMLInputElement;
     submitButton: HTMLButtonElement;
     form: HTMLElement;
     taskList: HTMLElement;
+    time: any;
+    tempTaskText: string;
+    tempTaskTime: number;
 
     constructor() {
         this.app = this.getElement("#root");
@@ -103,13 +106,20 @@ class View {
         this.form = this.createElement("form");
         this.input = this.createElement("input");
         this.input.type = "text";
-        this.input.placehold = "Add Task";
+        this.input.placeholder = "Add Task";
         this.input.name = "task";
+        this.time = this.createElement("input");
+        this.time.type = "number";
+        this.time.placeholder = "20 mins";
+        this.time.name = "time";
         this.submitButton = this.createElement("button");
         this.submitButton.textContent = "Submit";
         this.taskList = this.createElement("ul", "todo-list");
-        this.form.append(this.input, this.submitButton);
+        this.form.append(this.input, this.time, this.submitButton);
         this.app.append(this.title, this.form, this.taskList);
+        this.tempTaskText = "";
+        this.tempTaskTime = 0;
+        this.updateTempState();
     }
 
     createElement(tag: any, className?: any) {
@@ -130,8 +140,16 @@ class View {
         return this.input.value;
     }
 
+    private getTaskTime() {
+        return this.time.value;
+    }
+
     private resetInput() {
         this.input.value = "";
+    }
+
+    private resetTime() {
+        this.time.value = "";
     }
 
     displayTasks(tasks: Task[]) {
@@ -141,7 +159,7 @@ class View {
 
         if (tasks.length === 0) {
             let p = this.createElement("p");
-            p.textContent = "No tasks yet! Start dumping your to-dos!";
+            p.textContent = "No tasks yet? Start dumping your to-dos!";
             this.taskList.append(p);
         } else {
             tasks.forEach(task => {
@@ -156,6 +174,15 @@ class View {
                 span.contentEditable = true;
                 span.classList.add("editable");
 
+                let setTime = this.createElement("input");
+                setTime.type = "number";
+                setTime.value = task.time;
+                setTime.contentEditable = true;
+                setTime.classList.add("editable");
+
+                let timeText = this.createElement("p");
+                timeText.innerText = " "; // add word "mins" later
+
                 if (task.complete) {
                     let strike = this.createElement("s");
                     strike.textContent = task.text;
@@ -166,7 +193,7 @@ class View {
 
                 let deleteButton = this.createElement("button", "delete");
                 deleteButton.textContent = "Delete";
-                li.append(checkbox, span, deleteButton);
+                li.append(checkbox, span, setTime, timeText, deleteButton);
 
                 this.taskList.append(li);
             })
@@ -180,7 +207,9 @@ class View {
             if (this.getTaskText()) {
                 handler(this.getTaskText());
                 this.resetInput();
+                this.resetTime();
             }
+           
         
         })
     }
@@ -204,6 +233,40 @@ class View {
             }
         })
     }
+
+    private updateTempState() {
+        this.taskList.addEventListener("input", (e: event) => {
+            if (e.target.className === "editable" && e.target.type === "text") {
+                this.tempTaskText = e.target.innerText;
+                
+            } else if (e.target.type === "number") {
+                this.tempTaskTime = e.target.value;
+            } 
+        })
+    }
+
+    bindEditTaskText(handler: (arg0: number, arg1: string) => void) {
+        this.taskList.addEventListener("focusout", (e: event) => {
+            if (this.tempTaskText) {
+                let id = parseInt(e.target.parentElement.id);
+
+                handler(id, this.tempTaskText);
+                this.tempTaskText = "";
+            } 
+
+        })
+    }
+
+    bindEditTaskTime = (handler: (arg0: number, arg1: number) => void) => {
+        this.taskList.addEventListener("focusout", (e: event) => {
+            if (this.tempTaskTime) {
+                let id = parseInt(e.target.parentElement.id);
+
+                handler(id, this.tempTaskTime);
+                this.tempTaskTime = 20;
+            }
+        })
+    }
 }
 
 class Controller {
@@ -219,6 +282,8 @@ class Controller {
         this.view.bindDeleteTask(this.handleDeleteTask);
         this.view.bindToggleTask(this.handleToggleTask);
         this.model.bindTaskListChanged(this.onTaskListChanged);
+        this.view.bindEditTaskText(this.handleEditTaskText);
+        this.view.bindEditTaskTime(this.handleEditTaskTime);
     }
 
     onTaskListChanged = (tasks: Task[]) => {
