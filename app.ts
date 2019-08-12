@@ -26,12 +26,12 @@ class Model {
 
     }
 
-    addTask(input: string) {
+    addTask(input: string, inputTime: number) {
         let currTask = {
             id: this.tasks.length > 0 ? this.tasks[this.tasks.length - 1].id + 1 : 1,
             text: input,
             complete: false,
-            time: 20,
+            time: inputTime === undefined ? 20 : inputTime,
         }
 
         this.tasks.push(currTask);
@@ -95,7 +95,7 @@ class View {
     submitButton: HTMLButtonElement;
     form: HTMLElement;
     taskList: HTMLElement;
-    time: any;
+    time: HTMLInputElement;
     tempTaskText: string;
     tempTaskTime: number;
 
@@ -136,21 +136,6 @@ class View {
         return element;
     }
 
-    private getTaskText() {
-        return this.input.value;
-    }
-
-    private getTaskTime() {
-        return this.time.value;
-    }
-
-    private resetInput() {
-        this.input.value = "";
-    }
-
-    private resetTime() {
-        this.time.value = "";
-    }
 
     displayTasks(tasks: Task[]) {
         while (this.taskList.firstChild) {
@@ -161,6 +146,7 @@ class View {
             let p = this.createElement("p");
             p.textContent = "No tasks yet? Start dumping your to-dos!";
             this.taskList.append(p);
+
         } else {
             tasks.forEach(task => {
                 let li = this.createElement("li");
@@ -176,9 +162,7 @@ class View {
 
                 let setTime = this.createElement("input");
                 setTime.type = "number";
-                setTime.value = task.time;
-                setTime.contentEditable = true;
-                setTime.classList.add("editable");
+                setTime.value = task.time; 
 
                 let timeText = this.createElement("p");
                 timeText.innerText = " "; // add word "mins" later
@@ -204,8 +188,8 @@ class View {
         this.form.addEventListener("submit", (e: any) => {
             e.preventDefault();
 
-            if (this.getTaskText()) {
-                handler(this.getTaskText());
+            if (this.getTaskText() && this.getTaskTime()) {
+                handler(this.getTaskText(), this.getTaskTime());
                 this.resetInput();
                 this.resetTime();
             }
@@ -234,6 +218,17 @@ class View {
         })
     }
 
+    bindEditTaskTime = (handler: (arg0: number, arg1: number) => void) => {
+        this.taskList.addEventListener("focusout", (e: event) => {
+            if (this.tempTaskTime) {
+                let id = parseInt(e.target.parentElement.id);
+
+                handler(id, this.tempTaskTime);
+                this.tempTaskTime = 20;
+            }
+        })
+    }
+
     private updateTempState() {
         this.taskList.addEventListener("input", (e: event) => {
             if (e.target.className === "editable" && e.target.type === "text") {
@@ -243,6 +238,23 @@ class View {
                 this.tempTaskTime = e.target.value;
             } 
         })
+    }
+
+
+    private getTaskText() {
+        return this.input.value;
+    }
+
+    private getTaskTime() {
+        return this.time.value;
+    }
+
+    private resetInput() {
+        this.input.value = "";
+    }
+
+    private resetTime() {
+        this.time.value = "";
     }
 
     bindEditTaskText(handler: (arg0: number, arg1: string) => void) {
@@ -257,16 +269,7 @@ class View {
         })
     }
 
-    bindEditTaskTime = (handler: (arg0: number, arg1: number) => void) => {
-        this.taskList.addEventListener("focusout", (e: event) => {
-            if (this.tempTaskTime) {
-                let id = parseInt(e.target.parentElement.id);
-
-                handler(id, this.tempTaskTime);
-                this.tempTaskTime = 20;
-            }
-        })
-    }
+  
 }
 
 class Controller {
@@ -290,9 +293,11 @@ class Controller {
         this.view.displayTasks(tasks);
     }
 
-    handleAddTask = (input: string) => {
-        this.model.addTask(input);
-        
+    handleAddTask = (input: string, time: number) => {
+        if (time === undefined) {
+            time = 20;
+        }
+        this.model.addTask(input, time);
     }
 
     handleEditTaskText = (id: number, input: string) => {

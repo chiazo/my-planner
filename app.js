@@ -14,12 +14,12 @@ var Model = /** @class */ (function () {
     function Model() {
         this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
     }
-    Model.prototype.addTask = function (input) {
+    Model.prototype.addTask = function (input, inputTime) {
         var currTask = {
             id: this.tasks.length > 0 ? this.tasks[this.tasks.length - 1].id + 1 : 1,
             text: input,
             complete: false,
-            time: 20,
+            time: inputTime === undefined ? 20 : inputTime,
         };
         this.tasks.push(currTask);
         this.onTaskListChanged(this.tasks);
@@ -108,18 +108,6 @@ var View = /** @class */ (function () {
         var element = document.querySelector(selector);
         return element;
     };
-    View.prototype.getTaskText = function () {
-        return this.input.value;
-    };
-    View.prototype.getTaskTime = function () {
-        return this.time.value;
-    };
-    View.prototype.resetInput = function () {
-        this.input.value = "";
-    };
-    View.prototype.resetTime = function () {
-        this.time.value = "";
-    };
     View.prototype.displayTasks = function (tasks) {
         var _this = this;
         while (this.taskList.firstChild) {
@@ -143,8 +131,6 @@ var View = /** @class */ (function () {
                 var setTime = _this.createElement("input");
                 setTime.type = "number";
                 setTime.value = task.time;
-                setTime.contentEditable = true;
-                setTime.classList.add("editable");
                 var timeText = _this.createElement("p");
                 timeText.innerText = " "; // add word "mins" later
                 if (task.complete) {
@@ -166,8 +152,8 @@ var View = /** @class */ (function () {
         var _this = this;
         this.form.addEventListener("submit", function (e) {
             e.preventDefault();
-            if (_this.getTaskText()) {
-                handler(_this.getTaskText());
+            if (_this.getTaskText() && _this.getTaskTime()) {
+                handler(_this.getTaskText(), _this.getTaskTime());
                 _this.resetInput();
                 _this.resetTime();
             }
@@ -200,6 +186,18 @@ var View = /** @class */ (function () {
             }
         });
     };
+    View.prototype.getTaskText = function () {
+        return this.input.value;
+    };
+    View.prototype.getTaskTime = function () {
+        return this.time.value;
+    };
+    View.prototype.resetInput = function () {
+        this.input.value = "";
+    };
+    View.prototype.resetTime = function () {
+        this.time.value = "";
+    };
     View.prototype.bindEditTaskText = function (handler) {
         var _this = this;
         this.taskList.addEventListener("focusout", function (e) {
@@ -218,8 +216,11 @@ var Controller = /** @class */ (function () {
         this.onTaskListChanged = function (tasks) {
             _this.view.displayTasks(tasks);
         };
-        this.handleAddTask = function (input) {
-            _this.model.addTask(input);
+        this.handleAddTask = function (input, time) {
+            if (time === undefined) {
+                time = 20;
+            }
+            _this.model.addTask(input, time);
         };
         this.handleEditTaskText = function (id, input) {
             _this.model.editTaskText(id, input);
