@@ -1,3 +1,5 @@
+
+// Task Object
 class Task {
     id: number;
     text: string;
@@ -13,6 +15,7 @@ class Task {
 
 }
 
+// handles all the data
 class Model {
     tasks: Task[];
     constructor() {
@@ -60,8 +63,44 @@ class Model {
     }
 }
 
+// handles the DOM, HTML, and CSS
 class View {
-    constructor() {}
+    app: any;
+    title: any;
+    input: any;
+    submitButton: any;
+    form: any;
+    taskList: any;
+
+    constructor() {
+        this.app = this.getElement("#root");
+        this.title = this.createElement("h1");
+        this.title.textContent = "Plan Today Away!";
+        this.form = this.createElement("form");
+        this.input = this.createElement("input");
+        this.input.type = "text";
+        this.input.placehold = "Add Task";
+        this.input.name = "task";
+        this.submitButton = this.createElement("button");
+        this.submitButton.textContent = "Submit";
+        this.taskList = this.createElement("ul", "todo-list");
+        this.form.append(this.input, this.submitButton);
+        this.app.append(this.title, this.form, this.taskList);
+    }
+
+    createElement(tag: any, className?: any) {
+        let element = document.createElement(tag);
+        if (className) {
+            element.classList.add(className);
+        }
+
+        return element;
+    }
+
+    getElement(selector: any) {
+        let element = document.querySelector(selector);
+        return element;
+    }
 }
 
 class Controller {
