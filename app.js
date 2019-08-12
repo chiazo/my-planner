@@ -12,10 +12,7 @@ var Task = /** @class */ (function () {
 // handles all the data
 var Model = /** @class */ (function () {
     function Model() {
-        this.tasks = [
-            { id: 1, text: "Message back Morehead", complete: false, time: 15 },
-            { id: 2, text: "Finish adding transcripts to site", complete: false, time: 80 },
-        ];
+        this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
     }
     Model.prototype.addTask = function (input) {
         var currTask = {
@@ -25,26 +22,44 @@ var Model = /** @class */ (function () {
             time: 20,
         };
         this.tasks.push(currTask);
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     };
     Model.prototype.editTaskText = function (id, updatedInput) {
         this.tasks = this.tasks.map(function (task) {
             return task.id === id ? { id: task.id, text: updatedInput, complete: task.complete, time: task.time } : task;
         });
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     };
     Model.prototype.editTaskTime = function (id, updatedTime) {
         this.tasks = this.tasks.map(function (task) {
             return task.id === id ? { id: task.id, text: task.text, complete: task.complete, time: updatedTime } : task;
         });
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     };
     Model.prototype.deleteTask = function (id) {
         this.tasks = this.tasks.filter(function (task) {
             return task.id !== id;
         });
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     };
     Model.prototype.toggleTask = function (id) {
         this.tasks = this.tasks.map(function (task) {
             return task.id === id ? { id: task.id, text: task.text, complete: !task.complete, time: task.time } : task;
         });
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
+    };
+    Model.prototype.bindTaskListChanged = function (callback) {
+        this.onTaskListChanged = callback;
+        this.updateLocalStorage(this.tasks);
+    };
+    Model.prototype.updateLocalStorage = function (tasks) {
+        this.onTaskListChanged(tasks);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
     };
     return Model;
 }());
@@ -89,7 +104,7 @@ var View = /** @class */ (function () {
         }
         if (tasks.length === 0) {
             var p = this.createElement("p");
-            p.textContent = "No tasks yet! Start dumping your thoughts!";
+            p.textContent = "No tasks yet! Start dumping your to-dos!";
             this.taskList.append(p);
         }
         else {
@@ -117,12 +132,62 @@ var View = /** @class */ (function () {
             });
         }
     };
+    View.prototype.bindAddTask = function (handler) {
+        var _this = this;
+        this.form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (_this.getTaskText()) {
+                handler(_this.getTaskText());
+                _this.resetInput();
+            }
+        });
+    };
+    View.prototype.bindDeleteTask = function (handler) {
+        this.taskList.addEventListener("click", function (e) {
+            if (e.target.className === "delete") {
+                var id = parseInt(e.target.parentElement.id);
+                handler(id);
+            }
+        });
+    };
+    View.prototype.bindToggleTask = function (handler) {
+        this.taskList.addEventListener("change", function (e) {
+            if (e.target.type === "checkbox") {
+                var id = parseInt(e.target.parentElement.id);
+                handler(id);
+            }
+        });
+    };
     return View;
 }());
 var Controller = /** @class */ (function () {
     function Controller(model, view) {
+        var _this = this;
+        this.onTaskListChanged = function (tasks) {
+            _this.view.displayTasks(tasks);
+        };
+        this.handleAddTask = function (input) {
+            _this.model.addTask(input);
+        };
+        this.handleEditTaskText = function (id, input) {
+            _this.model.editTaskText(id, input);
+        };
+        this.handleEditTaskTime = function (id, time) {
+            _this.model.editTaskTime(id, time);
+        };
+        this.handleDeleteTask = function (id) {
+            _this.model.deleteTask(id);
+        };
+        this.handleToggleTask = function (id) {
+            _this.model.toggleTask(id);
+        };
         this.model = model;
         this.view = view;
+        this.onTaskListChanged(this.model.tasks);
+        this.view.bindAddTask(this.handleAddTask);
+        this.view.bindDeleteTask(this.handleDeleteTask);
+        this.view.bindToggleTask(this.handleToggleTask);
+        this.model.bindTaskListChanged(this.onTaskListChanged);
     }
     return Controller;
 }());

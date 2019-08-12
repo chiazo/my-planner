@@ -18,12 +18,11 @@ class Task {
 // handles all the data
 class Model {
     tasks: Task[];
-    constructor() {
+    onTaskListChanged: any;
 
-        this.tasks = [
-            { id: 1, text: "Message back Morehead", complete: false, time: 15},
-            { id: 2, text: "Finish adding transcripts to site", complete: false, time: 80},
-        ]
+    constructor() {
+        
+        this.tasks = JSON.parse(localStorage.getItem("tasks")!) || [];
 
     }
 
@@ -36,41 +35,66 @@ class Model {
         }
 
         this.tasks.push(currTask);
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     }
 
     editTaskText(id: number, updatedInput: string) {
         this.tasks = this.tasks.map(task =>
-            task.id === id ? {id: task.id, text: updatedInput, complete: task.complete, time: task.time} : task,
+            task.id === id ? { id: task.id, text: updatedInput, complete: task.complete, time: task.time } : task,
         )
+
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     }
 
     editTaskTime(id: number, updatedTime: number) {
         this.tasks = this.tasks.map(task =>
-            task.id === id ? {id: task.id, text: task.text, complete: task.complete, time: updatedTime} : task,
+            task.id === id ? { id: task.id, text: task.text, complete: task.complete, time: updatedTime } : task,
         )
+
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     }
 
     deleteTask(id: number) {
         this.tasks = this.tasks.filter(task =>
-           task.id !== id 
+            task.id !== id
         )
+
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
     }
 
     toggleTask(id: number) {
         this.tasks = this.tasks.map(task =>
-            task.id === id ? {id: task.id, text: task.text, complete: !task.complete, time: task.time} : task,
+            task.id === id ? { id: task.id, text: task.text, complete: !task.complete, time: task.time } : task,
         )
+
+        this.onTaskListChanged(this.tasks);
+        this.updateLocalStorage(this.tasks);
+    }
+
+    bindTaskListChanged(callback: any) {
+        this.onTaskListChanged = callback;
+        this.updateLocalStorage(this.tasks);
+    }
+
+    private updateLocalStorage(tasks: Task[]) {
+        this.onTaskListChanged(tasks);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
     }
 }
 
+
 // handles the DOM, HTML, and CSS
 class View {
-    app: any;
-    title: any;
-    input: any;
-    submitButton: any;
-    form: any;
-    taskList: any;
+    app: HTMLElement;
+    title: HTMLElement;
+    input: HTMLElement;
+    submitButton: HTMLButtonElement;
+    form: HTMLElement;
+    taskList: HTMLElement;
 
     constructor() {
         this.app = this.getElement("#root");
@@ -117,10 +141,10 @@ class View {
 
         if (tasks.length === 0) {
             let p = this.createElement("p");
-            p.textContent = "No tasks yet! Start dumping your thoughts!";
+            p.textContent = "No tasks yet! Start dumping your to-dos!";
             this.taskList.append(p);
         } else {
-            tasks.forEach(task =>{
+            tasks.forEach(task => {
                 let li = this.createElement("li");
                 li.id = task.id;
 
@@ -148,15 +172,82 @@ class View {
             })
         }
     }
+
+    bindAddTask(handler: (arg0: any) => void) {
+        this.form.addEventListener("submit", (e: any) => {
+            e.preventDefault();
+
+            if (this.getTaskText()) {
+                handler(this.getTaskText());
+                this.resetInput();
+            }
+        
+        })
+    }
+
+    bindDeleteTask(handler: (arg0: number) => void) {
+        this.taskList.addEventListener("click", (e: any) => {
+            if (e.target!.className === "delete") {
+                let id = parseInt(e.target.parentElement.id);
+
+                handler(id);
+            }
+        })
+    }
+
+    bindToggleTask(handler: (arg0: number) => void) {
+        this.taskList.addEventListener("change", (e: any) => {
+            if (e.target!.type === "checkbox") {
+                let id = parseInt(e.target.parentElement.id);
+
+                handler(id);
+            }
+        })
+    }
 }
 
 class Controller {
-     model: Model;
-     view: View;
+
+    model: Model;
+    view: View;
+
     constructor(model: Model, view: View) {
         this.model = model;
         this.view = view;
+        this.onTaskListChanged(this.model.tasks);
+        this.view.bindAddTask(this.handleAddTask);
+        this.view.bindDeleteTask(this.handleDeleteTask);
+        this.view.bindToggleTask(this.handleToggleTask);
+        this.model.bindTaskListChanged(this.onTaskListChanged);
     }
+
+    onTaskListChanged = (tasks: Task[]) => {
+        this.view.displayTasks(tasks);
+    }
+
+    handleAddTask = (input: string) => {
+        this.model.addTask(input);
+        
+    }
+
+    handleEditTaskText = (id: number, input: string) => {
+        this.model.editTaskText(id, input);
+    }
+
+    handleEditTaskTime = (id: number, time: number) => {
+        this.model.editTaskTime(id, time);
+    }
+
+    handleDeleteTask = (id: number) => {
+        this.model.deleteTask(id);
+    }
+
+    handleToggleTask = (id: number) => {
+        this.model.toggleTask(id);
+    }
+
+    
+    
 }
 
 let app = new Controller(new Model(), new View());
