@@ -67,6 +67,8 @@ var Model = /** @class */ (function () {
 var View = /** @class */ (function () {
     function View() {
         var _this = this;
+        this.bindCalcTime = function (handler) {
+        };
         this.bindEditTaskTime = function (handler) {
             _this.taskList.addEventListener("focusout", function (e) {
                 if (_this.tempTaskTime) {
@@ -79,6 +81,7 @@ var View = /** @class */ (function () {
         this.app = this.getElement("#root");
         this.title = this.createElement("h1");
         this.title.textContent = "My Planner";
+        this.title.style.textAlign = "center";
         this.form = this.createElement("form");
         this.input = this.createElement("input");
         this.input.type = "text";
@@ -91,8 +94,24 @@ var View = /** @class */ (function () {
         this.submitButton = this.createElement("button");
         this.submitButton.textContent = "Submit";
         this.taskList = this.createElement("ul", "todo-list");
+        this.timeFreeQuestion = this.createElement("h3");
+        this.form2 = this.createElement("form");
+        this.timeFreeQuestion.type = "text";
+        this.timeFreeQuestion.textContent = "How much freetime do you have right now?";
+        this.timeFreeQuestion.name = "freetime";
+        this.hours = document.createElement("input");
+        this.hours.type = "number";
+        this.hours.placeholder = "hours";
+        this.minutes = document.createElement("input");
+        this.minutes.type = "number";
+        this.minutes.placeholder = "minutes";
+        this.submitButton2 = this.createElement("button");
+        this.submitButton2.textContent = "Calculate Time for Tasks!";
+        this.totalTime = 0;
+        this.finalMessage = document.createElement("p");
+        this.form2.append(this.timeFreeQuestion, this.hours, this.minutes, this.submitButton2);
         this.form.append(this.input, this.time, this.submitButton);
-        this.app.append(this.title, this.form, this.taskList);
+        this.app.append(this.title, this.form, this.taskList, this.timeFreeQuestion, this.finalMessage, this.form2);
         this.tempTaskText = "";
         this.tempTaskTime = 0;
         this.updateTempState();
@@ -184,6 +203,10 @@ var View = /** @class */ (function () {
             else if (e.target.type === "number") {
                 _this.tempTaskTime = e.target.value;
             }
+        });
+        this.form2.addEventListener("submit", function (e) {
+            e.preventDefault();
+            _this.finalMessage.textContent = "You should be able to complete " + _this.totalTime + " tasks today!";
         });
     };
     View.prototype.getTaskText = function () {

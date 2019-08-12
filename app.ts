@@ -93,9 +93,16 @@ class View {
     title: HTMLElement;
     input: HTMLInputElement;
     submitButton: HTMLButtonElement;
+    submitButton2: HTMLButtonElement;
     form: HTMLElement;
+    form2: HTMLElement;
     taskList: HTMLElement;
     time: HTMLInputElement;
+    finalMessage: HTMLElement;
+    timeFreeQuestion: HTMLElement;
+    hours: HTMLInputElement;
+    minutes: HTMLInputElement;
+    totalTime: number;
     tempTaskText: string;
     tempTaskTime: number;
 
@@ -103,23 +110,49 @@ class View {
         this.app = this.getElement("#root");
         this.title = this.createElement("h1");
         this.title.textContent = "My Planner";
+        this.title.style.textAlign = "center";
         this.form = this.createElement("form");
+
         this.input = this.createElement("input");
         this.input.type = "text";
         this.input.placeholder = "Add Task";
         this.input.name = "task";
+
         this.time = this.createElement("input");
         this.time.type = "number";
         this.time.placeholder = "20 mins";
         this.time.name = "time";
+
         this.submitButton = this.createElement("button");
         this.submitButton.textContent = "Submit";
         this.taskList = this.createElement("ul", "todo-list");
+
+        this.timeFreeQuestion = this.createElement("h3");
+        this.form2 = this.createElement("form");
+        this.timeFreeQuestion.type = "text";
+        this.timeFreeQuestion.textContent = "How much freetime do you have right now?";
+        this.timeFreeQuestion.name = "freetime";
+
+        this.hours = document.createElement("input");
+        this.hours.type = "number";
+        this.hours.placeholder = "hours"
+        this.minutes = document.createElement("input");
+        this.minutes.type = "number";
+        this.minutes.placeholder = "minutes";
+        this.submitButton2 = this.createElement("button");
+        this.submitButton2.textContent = "Calculate Time for Tasks!"
+        this.totalTime = 0;
+        this.finalMessage = document.createElement("p");
+        
+
+        this.form2.append(this.timeFreeQuestion, this.hours, this.minutes, this.submitButton2);
         this.form.append(this.input, this.time, this.submitButton);
-        this.app.append(this.title, this.form, this.taskList);
+        this.app.append(this.title, this.form, this.taskList, this.timeFreeQuestion, this.finalMessage, this.form2);
         this.tempTaskText = "";
         this.tempTaskTime = 0;
         this.updateTempState();
+
+        
     }
 
     createElement(tag: any, className?: any) {
@@ -192,10 +225,14 @@ class View {
                 handler(this.getTaskText(), this.getTaskTime());
                 this.resetInput();
                 this.resetTime();
-            }
+            } 
            
         
         })
+    }
+
+    bindCalcTime = (handler: any) => {
+        
     }
 
     bindDeleteTask(handler: (arg0: number) => void) {
@@ -237,6 +274,14 @@ class View {
             } else if (e.target.type === "number") {
                 this.tempTaskTime = e.target.value;
             } 
+        })
+
+        this.form2.addEventListener("submit", (e: any) => {
+            e.preventDefault();
+
+
+
+            this.finalMessage.textContent = "You should be able to complete " + this.totalTime + " tasks today!";
         })
     }
 
