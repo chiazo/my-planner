@@ -75,7 +75,7 @@ class View {
     constructor() {
         this.app = this.getElement("#root");
         this.title = this.createElement("h1");
-        this.title.textContent = "Plan Today Away!";
+        this.title.textContent = "My Planner";
         this.form = this.createElement("form");
         this.input = this.createElement("input");
         this.input.type = "text";
@@ -100,6 +100,53 @@ class View {
     getElement(selector: any) {
         let element = document.querySelector(selector);
         return element;
+    }
+
+    private getTaskText() {
+        return this.input.value;
+    }
+
+    private resetInput() {
+        this.input.value = "";
+    }
+
+    displayTasks(tasks: Task[]) {
+        while (this.taskList.firstChild) {
+            this.taskList.removeChild(this.taskList.firstChild);
+        }
+
+        if (tasks.length === 0) {
+            let p = this.createElement("p");
+            p.textContent = "No tasks yet! Start dumping your thoughts!";
+            this.taskList.append(p);
+        } else {
+            tasks.forEach(task =>{
+                let li = this.createElement("li");
+                li.id = task.id;
+
+                let checkbox = this.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = task.complete;
+
+                let span = this.createElement("span");
+                span.contentEditable = true;
+                span.classList.add("editable");
+
+                if (task.complete) {
+                    let strike = this.createElement("s");
+                    strike.textContent = task.text;
+                    span.append(strike);
+                } else {
+                    span.textContent = task.text;
+                }
+
+                let deleteButton = this.createElement("button", "delete");
+                deleteButton.textContent = "Delete";
+                li.append(checkbox, span, deleteButton);
+
+                this.taskList.append(li);
+            })
+        }
     }
 }
 

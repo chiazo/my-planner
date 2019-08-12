@@ -53,7 +53,7 @@ var View = /** @class */ (function () {
     function View() {
         this.app = this.getElement("#root");
         this.title = this.createElement("h1");
-        this.title.textContent = "Plan Today Away!";
+        this.title.textContent = "My Planner";
         this.form = this.createElement("form");
         this.input = this.createElement("input");
         this.input.type = "text";
@@ -75,6 +75,47 @@ var View = /** @class */ (function () {
     View.prototype.getElement = function (selector) {
         var element = document.querySelector(selector);
         return element;
+    };
+    View.prototype.getTaskText = function () {
+        return this.input.value;
+    };
+    View.prototype.resetInput = function () {
+        this.input.value = "";
+    };
+    View.prototype.displayTasks = function (tasks) {
+        var _this = this;
+        while (this.taskList.firstChild) {
+            this.taskList.removeChild(this.taskList.firstChild);
+        }
+        if (tasks.length === 0) {
+            var p = this.createElement("p");
+            p.textContent = "No tasks yet! Start dumping your thoughts!";
+            this.taskList.append(p);
+        }
+        else {
+            tasks.forEach(function (task) {
+                var li = _this.createElement("li");
+                li.id = task.id;
+                var checkbox = _this.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = task.complete;
+                var span = _this.createElement("span");
+                span.contentEditable = true;
+                span.classList.add("editable");
+                if (task.complete) {
+                    var strike = _this.createElement("s");
+                    strike.textContent = task.text;
+                    span.append(strike);
+                }
+                else {
+                    span.textContent = task.text;
+                }
+                var deleteButton = _this.createElement("button", "delete");
+                deleteButton.textContent = "Delete";
+                li.append(checkbox, span, deleteButton);
+                _this.taskList.append(li);
+            });
+        }
     };
     return View;
 }());
