@@ -24,5 +24,7 @@ export interface SelectEventHandler {
          while (this.calendar.firstChild !== null) {
              this.calendar.removeChild(this.calendar.firstChild);
          }
+
+    
      }
  }

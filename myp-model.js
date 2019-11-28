@@ -9,6 +9,10 @@ var Day = /** @class */ (function () {
         this.tasks = [];
         this.events = [];
         this.date = new Date();
+        this.hours = [];
+        for (var i = 0; i < 12; i++) {
+            this.hours[this.hours.length] = new Hour(i + 8);
+        }
     }
     Day.prototype.addTask = function (name) {
         this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
@@ -25,6 +29,42 @@ var Day = /** @class */ (function () {
     return Day;
 }());
 exports.Day = Day;
+var Hour = /** @class */ (function () {
+    function Hour(startime) {
+        this.startTime = startime;
+        this.endTime = startime + 1;
+        this.tasks = [];
+        this.events = [];
+        if (this.startTime <= 12) {
+            this.morning = true;
+        }
+        else {
+            this.morning = false;
+        }
+    }
+    Hour.prototype.addTask = function (name) {
+        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    };
+    Hour.prototype.addEvent = function () {
+        this.events[this.events.length] = new Event(this.events.length, name);
+    };
+    Hour.prototype.removeTask = function (task) {
+        delete this.tasks[task.id];
+    };
+    Hour.prototype.removeEvent = function (e) {
+        delete this.events[e.id];
+    };
+    Hour.prototype.getStartTime = function () {
+        if (this.startTime <= 12) {
+            return this.startTime;
+        }
+        else {
+            return this.startTime - 12;
+        }
+    };
+    return Hour;
+}());
+exports.Hour = Hour;
 var Task = /** @class */ (function () {
     function Task(id, name, hours, mins) {
         this.id = id;

@@ -7,11 +7,16 @@ export class Day {
     tasks: Task[];
     events: Event[];
     date: Date;
+    hours: Hours[];
 
     constructor() {
         this.tasks = [];
         this.events = [];
         this.date = new Date();
+        this.hours = [];
+        for(let i = 0; i < 12; i++) {
+            this.hours[this.hours.length] = new Hour(i + 8);
+        }
     }
 
     addTask(name: string) {
@@ -28,6 +33,51 @@ export class Day {
 
     removeEvent(e: Event) {
         delete this.events[e.id];
+    }
+
+}
+
+export class Hour {
+    startTime: number;
+    endTime: number;
+    tasks: Task[];
+    events: Event[];
+    morning: boolean;
+
+    constructor(startime: number) {
+        this.startTime = startime;
+        this.endTime = startime + 1;
+        this.tasks = [];
+        this.events = [];
+        if (this.startTime <= 12) {
+            this.morning = true;
+        } else {
+            this.morning = false;
+        }
+    }
+
+    addTask(name: string) {
+        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    }
+
+    addEvent() {
+        this.events[this.events.length] = new Event(this.events.length, name);
+    }
+
+    removeTask(task: Task) {
+        delete this.tasks[task.id];
+    }
+
+    removeEvent(e: Event) {
+        delete this.events[e.id];
+    }
+
+    getStartTime(): number {
+        if (this.startTime <= 12) {
+            return this.startTime;
+        } else {
+            return this.startTime - 12;
+        }
     }
 }
 
