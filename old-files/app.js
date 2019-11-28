@@ -5,11 +5,17 @@ var Task = /** @class */ (function () {
         this.id = id;
         this.text = text;
         this.complete = complete;
-        this.time = time;
+        if (time) {
+            this.time = time;
+        }
+        else {
+            this.time = 20;
+        }
     }
     return Task;
 }());
-// handles all the data
+// MODEL
+// = handles data with methods that can manipulate it
 var Model = /** @class */ (function () {
     function Model() {
         this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -63,7 +69,8 @@ var Model = /** @class */ (function () {
     };
     return Model;
 }());
-// handles the DOM, HTML, and CSS
+// VIEW
+// = handles the DOM, HTML, and CSS
 var View = /** @class */ (function () {
     function View() {
         var _this = this;

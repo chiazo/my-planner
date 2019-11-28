@@ -6,16 +6,21 @@ class Task {
     complete: boolean;
     time: number;
 
-    constructor(id: number, text: string, complete: boolean, time: number) {
+    constructor(id: number, text: string, complete: boolean, time?: number) {
         this.id = id;
         this.text = text;
         this.complete = complete;
-        this.time = time;
+        if (time) {
+            this.time = time;
+        } else {
+            this.time = 20;
+        }
     }
 
 }
 
-// handles all the data
+// MODEL
+// = handles data with methods that can manipulate it
 class Model {
     tasks: Task[];
     onTaskListChanged: any;
@@ -87,7 +92,8 @@ class Model {
 }
 
 
-// handles the DOM, HTML, and CSS
+// VIEW
+// = handles the DOM, HTML, and CSS
 class View {
     app: HTMLElement;
     title: HTMLElement;

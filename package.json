@@ -2,7 +2,7 @@
   "name": "myplanner",
   "version": "1.0.0",
   "description": "plan your day!",
-  "main": "app.js",
+  "main": "main.js",
   "scripts": {
     "test": "haha",
     "tsc": "tsc",
