@@ -7,7 +7,7 @@ export class Day {
     tasks: Task[];
     events: Event[];
     date: Date;
-    hours: Hours[];
+    hours: Hour[];
 
     constructor() {
         this.tasks = [];
@@ -17,14 +17,15 @@ export class Day {
         for(let i = 0; i < 12; i++) {
             this.hours[this.hours.length] = new Hour(i + 8);
         }
+        this.reset();
     }
 
-    addTask(name: string) {
-        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    addTask(name: string, hours?: number, mins?: number) {
+        this.tasks[this.tasks.length] = new Task(this.tasks.length, name, hours, mins);
     }
 
-    addEvent() {
-        this.events[this.events.length] = new Event(this.events.length, name);
+    addEvent(name: string, hours?: number, mins?: number) {
+        this.events[this.events.length] = new Event(this.events.length, name, hours, mins);
     }
 
     removeTask(task: Task) {
@@ -35,11 +36,36 @@ export class Day {
         delete this.events[e.id];
     }
 
+    reset(): void {
+        this.hours = [];
+
+        for (let i = 0; i < 12; i++) {
+            this.hours[this.hours.length] = new Hour(i + 8);
+        }
+    }
+
+    schedule(): void {
+        let i = 0;
+        let h = 0;
+        let hour = this.hours[h];
+        let task = this.tasks[i];
+        while (i < this.tasks.length && task !== null && h !== 12) {
+            if ((hour.takenTime + task.timeInMinutes()) < 60) {
+                hour.addTask(task);
+                task.changeTimeSpan(hour.getStartTime());
+            }
+            h++;
+            i++;
+        }
+       
+    }
+
 }
 
 export class Hour {
     startTime: number;
     endTime: number;
+    takenTime: number;
     tasks: Task[];
     events: Event[];
     morning: boolean;
@@ -49,6 +75,7 @@ export class Hour {
         this.endTime = startime + 1;
         this.tasks = [];
         this.events = [];
+        this.takenTime = 0;
         if (this.startTime <= 12) {
             this.morning = true;
         } else {
@@ -56,19 +83,23 @@ export class Hour {
         }
     }
 
-    addTask(name: string) {
-        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    addTask(t: Task) {
+        this.tasks[this.tasks.length] = t;
+        this.takenTime += t.time.getMinutes();
     }
 
-    addEvent() {
-        this.events[this.events.length] = new Event(this.events.length, name);
+    addEvent(e: Event) {
+        this.events[this.events.length] = e;
+        this.takenTime += e.time.getMinutes();
     }
 
     removeTask(task: Task) {
+        this.takenTime -= task.time.getMinutes();
         delete this.tasks[task.id];
     }
 
     removeEvent(e: Event) {
+        this.takenTime -= e.time.getMinutes();
         delete this.events[e.id];
     }
 
@@ -87,6 +118,8 @@ export class Task {
     complete: boolean;
     time: Date;
     subtasks: Task[];
+    startTime: number;
+    endTime: number;
 
     constructor(id: number, name: string, hours?: number, mins?: number) {
         this.id = id;
@@ -103,6 +136,8 @@ export class Task {
         } else {
             this.time.setMinutes(20);
         }
+        this.startTime = -2;
+        this.endTime = -1;
     }
 
     addSubTask(name: string, hours?: number, mins?: number): void {
@@ -140,6 +175,11 @@ export class Task {
 
     isComplete(): boolean {
         return this.complete;
+    }
+
+    changeTimeSpan(start: number) {
+        this.startTime = start;
+        this.endTime = start + this.timeInHours();
     }
  }
 

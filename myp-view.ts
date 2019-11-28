@@ -1,7 +1,7 @@
-import { Day } from "./myp-model";
+import { Day, Hour } from "./myp-model";
 
 export interface SelectEventHandler {
-
+    (row: number, col: number): void;
 }
 
 /**
@@ -25,6 +25,31 @@ export interface SelectEventHandler {
              this.calendar.removeChild(this.calendar.firstChild);
          }
 
-    
+         let grid: Hour[] = this.model.hours;
+         let table: HTMLTableElement = document.createElement("table");
+
+         for (let row = 0; row < grid.length; row++) {
+             let tr: HTMLTableRowElement = document.createElement("tr");
+             for (let col = 0; col < 1; col++) {
+                 let td: HTMLTableDataCellElement = document.createElement("td");
+                 // td.setAttribute("class", "blah")
+                 if (grid[row].tasks.length !== 0) {
+                     td.setAttribute("class", "containsT");
+                 } else {
+                     td.setAttribute("class", "noT");
+                 }
+                 td.onclick = () => {
+                     if (this.onselect !== null) {
+                         console.log(row, col);
+                     }
+                 };
+
+                 tr.appendChild(td);
+
+             }
+             table.appendChild(tr);
+         }
+
+         this.calendar.appendChild(table);
      }
  }

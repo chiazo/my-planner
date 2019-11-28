@@ -13,18 +13,39 @@ var Day = /** @class */ (function () {
         for (var i = 0; i < 12; i++) {
             this.hours[this.hours.length] = new Hour(i + 8);
         }
+        this.reset();
     }
-    Day.prototype.addTask = function (name) {
-        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    Day.prototype.addTask = function (name, hours, mins) {
+        this.tasks[this.tasks.length] = new Task(this.tasks.length, name, hours, mins);
     };
-    Day.prototype.addEvent = function () {
-        this.events[this.events.length] = new Event(this.events.length, name);
+    Day.prototype.addEvent = function (name, hours, mins) {
+        this.events[this.events.length] = new Event(this.events.length, name, hours, mins);
     };
     Day.prototype.removeTask = function (task) {
         delete this.tasks[task.id];
     };
     Day.prototype.removeEvent = function (e) {
         delete this.events[e.id];
+    };
+    Day.prototype.reset = function () {
+        this.hours = [];
+        for (var i = 0; i < 12; i++) {
+            this.hours[this.hours.length] = new Hour(i + 8);
+        }
+    };
+    Day.prototype.schedule = function () {
+        var i = 0;
+        var h = 0;
+        var hour = this.hours[h];
+        var task = this.tasks[i];
+        while (i < this.tasks.length && task !== null && h !== 12) {
+            if ((hour.takenTime + task.timeInMinutes()) < 60) {
+                hour.addTask(task);
+                task.changeTimeSpan(hour.getStartTime());
+            }
+            h++;
+            i++;
+        }
     };
     return Day;
 }());
@@ -35,6 +56,7 @@ var Hour = /** @class */ (function () {
         this.endTime = startime + 1;
         this.tasks = [];
         this.events = [];
+        this.takenTime = 0;
         if (this.startTime <= 12) {
             this.morning = true;
         }
@@ -42,16 +64,20 @@ var Hour = /** @class */ (function () {
             this.morning = false;
         }
     }
-    Hour.prototype.addTask = function (name) {
-        this.tasks[this.tasks.length] = new Task(this.tasks.length, name);
+    Hour.prototype.addTask = function (t) {
+        this.tasks[this.tasks.length] = t;
+        this.takenTime += t.time.getMinutes();
     };
-    Hour.prototype.addEvent = function () {
-        this.events[this.events.length] = new Event(this.events.length, name);
+    Hour.prototype.addEvent = function (e) {
+        this.events[this.events.length] = e;
+        this.takenTime += e.time.getMinutes();
     };
     Hour.prototype.removeTask = function (task) {
+        this.takenTime -= task.time.getMinutes();
         delete this.tasks[task.id];
     };
     Hour.prototype.removeEvent = function (e) {
+        this.takenTime -= e.time.getMinutes();
         delete this.events[e.id];
     };
     Hour.prototype.getStartTime = function () {
@@ -84,6 +110,8 @@ var Task = /** @class */ (function () {
         else {
             this.time.setMinutes(20);
         }
+        this.startTime = -2;
+        this.endTime = -1;
     }
     Task.prototype.addSubTask = function (name, hours, mins) {
         this.subtasks[this.subtasks.length] = new Task(this.subtasks.length, name, hours, mins);
@@ -114,6 +142,10 @@ var Task = /** @class */ (function () {
     };
     Task.prototype.isComplete = function () {
         return this.complete;
+    };
+    Task.prototype.changeTimeSpan = function (start) {
+        this.startTime = start;
+        this.endTime = start + this.timeInHours();
     };
     return Task;
 }());

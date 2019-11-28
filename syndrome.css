@@ -102,9 +102,9 @@ hr { /* horizontal line divider */
 /* buttons */
 
 [type="button"],
-[type="submit"] {
+[type="submit"], button {
   display: inline-block;
-  background: #3fbbb5c4;
+  background: #0e4744c4;
   box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.3);
   border: 1px solid #fefefe;
   color: white;
