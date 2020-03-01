@@ -1,0 +1,28 @@
+/* grid */
+.column {
+    float: left;
+    padding: 30px;
+    text-align: justify;
+  }
+
+.header {
+    float: left;
+    width: 33%;
+}
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.left-arr, .right-arr {
+    width: 25%;
+}
+
+.date {
+    width: 50%;
+}
+
+
+
