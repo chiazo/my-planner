@@ -1,0 +1,5 @@
+.navigation {
+    flex-basis: 25%;
+    min-width: 220px;
+    padding: 20px;
+}

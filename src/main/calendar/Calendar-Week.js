@@ -35,8 +35,13 @@ class CalendarWeek extends React.Component {
 
     renderDays() {
         const dateFormat = "EEE d";
-        const days = [];
         
+        const days = [];
+        let dayStart = dateFns.startOfDay(this.state.currDate);
+        const dayEnd = dateFns.endOfDay(this.state.currDate);
+        dayStart = dateFns.addHours(dayStart, 6);
+
+
         // setting up hour view on left
         days.push(
             <div className="column">
@@ -101,7 +106,7 @@ class CalendarWeek extends React.Component {
 
     render() {
         return (
-            <div className="calendar-day">
+            <div className="calendar-day row">
                 {this.renderHeader()}
                 {this.renderDays()}
                 {/* {this.renderHours()} */}

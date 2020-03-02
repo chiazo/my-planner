@@ -4,9 +4,8 @@ import "./Navigation.css";
 class Navigation extends React.Component {
     render() {
         return (
-            <div className="breakdown">
-                
-              
+            <div className="navigation row">
+                DAY                              
             </div>
         )
     }

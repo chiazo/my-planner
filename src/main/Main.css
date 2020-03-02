@@ -25,6 +25,7 @@ body {
     width: 33%;
 }
 
+
 .row::after {
     content: "";
     display: table;
