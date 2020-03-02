@@ -1,16 +1,17 @@
 import React from "react";
 import * as dateFns from "date-fns";
 
-const DayView = (props) => {
+const DayView = ({ currDate, onHourClick }) => {
 
     const dateFormat = "h a";
-        const currDate = props.currDate;
-        let dayStart = dateFns.startOfDay(currDate);
-        const dayEnd = dateFns.endOfDay(currDate);
+        const currentDate = currDate;
+        let dayStart = dateFns.startOfDay(currentDate);
+        const dayEnd = dateFns.endOfDay(currentDate);
         dayStart = dateFns.addHours(dayStart, 1);
 
         const rows = [];
         let hours = [];
+        let keys = [];
         let begHour = dayStart.getHours();
         let endHour = dayEnd.getHours();
         let currHour = dayStart;
@@ -23,19 +24,19 @@ const DayView = (props) => {
         if (i % 2 === 0) {
             for (let j = 0; j < 12; j++) {
                 formattedHour = dateFns.format(currHour, dateFormat);
-                cells.push(<div className="row hour-cell cell" key={tempDay}>
+                cells.push(<div className="row hour-cell cell" key={i}>
                     {formattedHour}
                 </div>)
+                keys.push(currHour);
                 currHour = dateFns.addHours(currHour, 1);
             }
             tempDay = dateFns.addHours(tempDay, 1);
-            hours.push(<div className="column hour-cell cell" key={tempDay}>{cells}</div>)
+            hours.push(<div className="column hour-col cell" key={i + 12}>{cells}</div>)
         } else {
             for (let j = 0; j < 12; j++) {
-
                 cells.push(<div className="row"
-                    onClick={(currHour) => this.onHourClick(currHour)}>
-                    hello
+                    onClick={() => onHourClick(keys[j])} key={keys[j]}>
+                    &nbsp;
                 </div>)
 
             }

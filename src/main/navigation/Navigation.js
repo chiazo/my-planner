@@ -5,16 +5,7 @@ class Navigation extends React.Component {
     render() {
         return (
             <div className="navigation row">
-                DAY                              
-            </div>
-        )
-    }
-}
-
-export default Navigation;
-
-/**
- * <section className="nav-day">
+                <section className="nav-day">
                     Day
                 </section>
                 <section className="nav-week">
@@ -34,5 +25,14 @@ export default Navigation;
                 </section>
                 <section>
                     Completed
-                </section>
+                </section>                           
+            </div>
+        )
+    }
+}
+
+export default Navigation;
+
+/**
+ * 
  */

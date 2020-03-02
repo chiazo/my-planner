@@ -6,7 +6,7 @@ import CalendarWeek from "../calendar/Calendar-Week";
 class Landing extends React.Component {
     render() {
         return(
-            <div class="landing">
+            <div className="landing">
                 <CalendarDay/>
             </div>
         )

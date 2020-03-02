@@ -1,3 +1,9 @@
 .head div {
     margin: 0;
 }
+
+.head {
+    border: 1px solid rgb(228, 228, 228);
+    background-color: hsl(0, 0%, 95%);
+    margin:  0 20px;
+}
