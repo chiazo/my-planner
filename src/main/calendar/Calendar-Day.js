@@ -41,13 +41,25 @@ class CalendarDay extends React.Component {
     onHourClick = (day, div) => {
         var updatedHours = this.state.freeHours.concat(day);
 
+        if (this.containsHour(day)) {
+            updatedHours = this.state.freeHours.filter(item => item.getTime() !== day.getTime());
+        }
+
         this.setState({
             freeHours: updatedHours
         })
-
-        div.style.backgroundColor = "yellow";
+        
+        if (!div.style.backgroundColor) {
+            div.style.backgroundColor = "#7db3f0";
+        } else {
+            div.style.backgroundColor = "";
+        }
 
         console.log(updatedHours);
+    }
+
+    containsHour = day => {
+        return this.state.freeHours.some( item => item.getTime() === day.getTime());
     }
 
     nextDay = () => {
