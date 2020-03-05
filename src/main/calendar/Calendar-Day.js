@@ -2,6 +2,8 @@ import React from "react";
 import "./Calendar-Day.css";
 import * as dateFns from "date-fns";
 import DayView from "./Day-View";
+import LeftArrow from "/Users/chiazo/my-planner/my-planner/src/icons/left_arrow.png";
+import RightArrow from "/Users/chiazo/my-planner/my-planner/src/icons/right_arrow.png"
 
 
 class CalendarDay extends React.Component {
@@ -21,7 +23,7 @@ class CalendarDay extends React.Component {
             <div className="header-day row">
                 <div className="left-arr icon header"
                     onClick={this.prevDay} >
-                    left_arrow
+                    <img className="arrows "src={LeftArrow} alt="left_arrow"/>
                 </div>
                 <div className="date header">
                     <span>
@@ -30,7 +32,7 @@ class CalendarDay extends React.Component {
                 </div>
                 <div className="right-arr icon header"
                     onClick={this.nextDay}>
-                    right_arrow
+                    <img className="arrows "src={RightArrow} alt="right_arrow"/>
                 </div>
             </div>
         );
@@ -62,7 +64,7 @@ class CalendarDay extends React.Component {
 
     render() {
         return (
-            <div className="calendar-day row">
+            <div className="calendar-day">
                 {this.renderHeader()}
                 <DayView currDate={dateFns.startOfDay(new Date())} 
                 selectedHour={this.state.selectedHour}

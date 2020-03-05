@@ -3,3 +3,16 @@
     padding: 20px 0;
     margin: 0;
 }
+
+.calendar-day div, col {
+    text-align: center;
+    margin: 0;
+}
+
+.header-day {
+    display: inline-block
+}
+
+.day-view {
+    display: table-row;
+}

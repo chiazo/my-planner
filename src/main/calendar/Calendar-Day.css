@@ -2,6 +2,8 @@
 .column {
     float: left;
     padding: 30px;
+    padding-left: 55px;
+    padding-right: 55px;
     text-align: justify;
   }
 
@@ -34,6 +36,21 @@
 }
 
 .hour-col {
-    width: auto;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    margin-top: 10px;
 }
 
+.arrows {
+    width: 15px;
+}
+
+.hour-cell {
+    border-bottom: 1px solid grey;
+    width: 100%;
+}
+
+.day-view {
+    border: 1px solid black;
+    display: flex;
+}

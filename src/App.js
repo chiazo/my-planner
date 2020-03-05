@@ -6,7 +6,7 @@ import Main from "./main/Main";
 const App = () => {
   
   return (
-    <div class="app">
+    <div className="app">
         <Header />
         <Main/>
     </div>
