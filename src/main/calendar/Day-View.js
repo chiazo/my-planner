@@ -28,16 +28,18 @@ const DayView = ({ currDate, onHourClick }) => {
             }
             tempDay = dateFns.addHours(tempDay, 1);
             hours.push(<div className="column hour-col cell" key={i}>{cells}</div>)
+            cells = [];
         } else {
             for (let j = 0; j < 12; j++) {
                 cells.push(<div className="row hour-cell cell"
-                    onClick={() => onHourClick(keys[j])} key={keys[j]}>
+                    onClick={(e) => onHourClick(keys[j], e.currentTarget)} key={keys[j]}>
                         &emsp;&emsp;&emsp;&emsp;&emsp;
                 </div>)
 
             }
             tempDay = dateFns.addHours(tempDay, 1);
             hours.push(<div className="column" key={i + 4}>{cells}</div>)
+            cells = [];
         }
 
     }

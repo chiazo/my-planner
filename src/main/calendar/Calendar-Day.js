@@ -38,12 +38,14 @@ class CalendarDay extends React.Component {
         );
     }
 
-    onHourClick = day => {
+    onHourClick = (day, div) => {
         var updatedHours = this.state.freeHours.concat(day);
 
         this.setState({
             freeHours: updatedHours
         })
+
+        div.style.backgroundColor = "yellow";
 
         console.log(updatedHours);
     }
