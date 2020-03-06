@@ -1,6 +1,7 @@
 import React from "react";
 import "./TaskList.css";
 import Task from "./Task";
+import TaskInput from "./TaskInput";
 
 const tasks = [
     {
@@ -30,6 +31,9 @@ class TaskList extends React.Component {
     render() {
         return(
             <section>
+                <div>
+                    <TaskInput/>
+                </div>
                 <ul className="task-list">
                     {
                         tasks.map( (task) => (

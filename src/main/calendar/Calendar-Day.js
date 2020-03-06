@@ -7,13 +7,20 @@ import RightArrow from "/Users/chiazo/my-planner/my-planner/src/icons/right_arro
 
 
 class CalendarDay extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state.divMap.set(this.state.currDate, []);
+    }
     state = {
         currMonth: new Date(),
         currDate: new Date(),
         currHour: new Date(),
         selectedHour: new Date(),
         freeHours: [],
-        restrictedHours: []
+        restrictedHours: [],
+        currDivs: [],
+        allDivs: [],
+        divMap: new Map()
     };
 
     renderHeader() {
@@ -38,15 +45,29 @@ class CalendarDay extends React.Component {
         );
     }
 
-    onHourClick = (day, div) => {
-        var updatedHours = this.state.freeHours.concat(day);
-
-        if (this.containsHour(day)) {
-            updatedHours = this.state.freeHours.filter(item => item.getTime() !== day.getTime());
+    onHourClick = (hour, div) => {
+        var updatedHours = this.state.freeHours.concat(hour);
+        var updatedDivs;
+        if (this.state.divMap.has(this.state.currDate)) {
+            updatedDivs = this.state.divMap.get(this.state.currDate).concat(div);
+        } else {
+            updatedDivs = [div];
+        }
+        var allKnownDivs = this.state.allDivs.concat(div);
+    
+        if (this.containsHour(hour)) {
+            updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
+            if (this.state.divMap.has(this.state.currDate)) {
+                updatedDivs = this.state.divMap.get(this.state.currDate).filter(item => item !== div);
+            }
         }
 
+        var newMap = this.state.divMap.set(this.state.currDate, updatedDivs);
+
         this.setState({
-            freeHours: updatedHours
+            freeHours: updatedHours,
+            divMap: newMap,
+            allDivs: allKnownDivs
         })
         
         if (!div.style.backgroundColor) {
@@ -56,16 +77,35 @@ class CalendarDay extends React.Component {
         }
 
         console.log(updatedHours);
+        console.log(updatedDivs);
     }
 
-    containsHour = day => {
-        return this.state.freeHours.some( item => item.getTime() === day.getTime());
+    containsHour = hour => {
+        return this.state.freeHours.some( item => item.getTime() === hour.getTime());
+    }
+
+    changeDivColors = () => {
+        // if (this.state.divMap.has(this.state.currDate)) {
+        //     this.state.divMap.get(this.state.currDate).forEach(div => {
+        //         div.style.backgroundColor = "#7db3f0";
+        //     })
+        // } else {
+        //     this.state.allDivs.forEach(div => {
+        //         div.style.backgroundColor = "";
+        //     });
+        // }
+
+        this.state.allDivs.forEach(d => {
+            d.style.backgroundColor = "";
+        })
     }
 
     nextDay = () => {
         this.setState({
             currDate: dateFns.addDays(this.state.currDate, 1)
         });
+        
+        this.changeDivColors();
     };
 
     prevDay = () => {
@@ -73,6 +113,7 @@ class CalendarDay extends React.Component {
             currDate: dateFns.subDays(this.state.currDate, 1)
         });
 
+        this.changeDivColors();
     };
 
 
