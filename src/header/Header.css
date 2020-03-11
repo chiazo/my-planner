@@ -1,10 +1,27 @@
 .head div {
-    margin: 0;
+    /* margin: 0; */
 }
 
 .head {
-    border: 1px solid rgb(228, 228, 228);
-    background-color: hsl(0, 0%, 95%);
+    border-bottom: 3px solid rgb(153, 153, 153);
+    /* background-color: hsl(0, 0%, 95%); */
     margin:  0 20px;
-    
+    position: relative;
+}
+
+.name-tag {
+    position: static;
+    float: right;
+    border: none;
+    background-color: inherit;
+    text-align: right;
+    display: block;
+    margin-top: 2rem;
+    margin-right: 3rem;
+}
+
+.site-title {
+    /* margin-left: 3rem; */
+    /* margin-right: 3rem; */
+    padding: 20px;
 }

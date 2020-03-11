@@ -30,7 +30,7 @@ class CalendarDay extends React.Component {
             <div className="header-day row">
                 <div className="left-arr icon header"
                     onClick={this.prevDay} >
-                    <img className="arrows "src={LeftArrow} alt="left_arrow"/>
+                    <img className="arrows " src={LeftArrow} alt="left_arrow" />
                 </div>
                 <div className="date header">
                     <span>
@@ -39,11 +39,34 @@ class CalendarDay extends React.Component {
                 </div>
                 <div className="right-arr icon header"
                     onClick={this.nextDay}>
-                    <img className="arrows "src={RightArrow} alt="right_arrow"/>
+                    <img className="arrows " src={RightArrow} alt="right_arrow" />
                 </div>
             </div>
         );
     }
+
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     const { divMap, currDate } = this.state;
+
+    //     if (prevProps.currDate) {
+    //         if (prevProps.currDate.toString() !== currDate.toString()) {
+    //             var divsToColor;
+    //             if (divMap.has(currDate.toString())) {
+    //                 divsToColor = divMap.get(currDate.toString());
+    //                 divsToColor.forEach(el => {
+    //                     el.style.backgroundColor = "#32a854";
+    //                 })
+    //             } else {
+    //                 const divElements = document.querySelectorAll(".color");
+    //                 divElements.forEach(el => {
+    //                     el.style.backgroundColor = "";
+    //                 })
+    //             }
+    //         }
+    //     }
+
+    // }
 
     onHourClick = (hour, div) => {
         var updatedHours = this.state.freeHours.concat(hour);
@@ -54,7 +77,7 @@ class CalendarDay extends React.Component {
             updatedDivs = [div];
         }
         var allKnownDivs = this.state.allDivs.concat(div);
-    
+
         if (this.containsHour(hour)) {
             updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
             if (this.state.divMap.has(this.state.currDate)) {
@@ -69,7 +92,7 @@ class CalendarDay extends React.Component {
             divMap: newMap,
             allDivs: allKnownDivs
         })
-        
+
         if (!div.style.backgroundColor) {
             div.style.backgroundColor = "#7db3f0";
         } else {
@@ -81,7 +104,7 @@ class CalendarDay extends React.Component {
     }
 
     containsHour = hour => {
-        return this.state.freeHours.some( item => item.getTime() === hour.getTime());
+        return this.state.freeHours.some(item => item.getTime() === hour.getTime());
     }
 
     changeDivColors = () => {
@@ -100,11 +123,12 @@ class CalendarDay extends React.Component {
         })
     }
 
+
     nextDay = () => {
         this.setState({
             currDate: dateFns.addDays(this.state.currDate, 1)
         });
-        
+
         this.changeDivColors();
     };
 
@@ -121,9 +145,9 @@ class CalendarDay extends React.Component {
         return (
             <div className="calendar-day">
                 {this.renderHeader()}
-                <DayView currDate={dateFns.startOfDay(new Date())} 
-                selectedHour={this.state.selectedHour}
-                onHourClick={this.onHourClick.bind(this)}/>
+                <DayView currDate={dateFns.startOfDay(new Date())}
+                    selectedHour={this.state.selectedHour}
+                    onHourClick={this.onHourClick.bind(this)} />
                 {/* <div>Cells</div> */}
             </div>
         )

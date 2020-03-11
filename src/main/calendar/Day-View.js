@@ -32,12 +32,12 @@ const DayView = ({ currDate, onHourClick }) => {
         } else {
             for (let j = 0; j < 12; j++) {
                 if (i === 1) {
-                    cells.push(<div className="row hour-cell cell"
+                    cells.push(<div className="row hour-cell cell color"
                     onClick={(e) => onHourClick(keys[j], e.currentTarget)} key={keys[j]}>
                         &emsp;&emsp;&emsp;&emsp;&emsp;
                 </div>)
                 } else {
-                    cells.push(<div className="row hour-cell cell"
+                    cells.push(<div className="row hour-cell cell color"
                     onClick={(e) => onHourClick(keys[j + 12], e.currentTarget)} key={keys[j + 12]}>
                         &emsp;&emsp;&emsp;&emsp;&emsp;
                 </div>)

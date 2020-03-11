@@ -34,13 +34,13 @@ class TaskList extends React.Component {
                 <div>
                     <TaskInput/>
                 </div>
-                <ul className="task-list">
+                {/* <ul className="task-list">
                     {
                         tasks.map( (task) => (
                             <Task key={task.id.toString()} name={task.name}/>
                         ))
                     }
-                </ul>
+                </ul> */}
             </section>
         )
     }
