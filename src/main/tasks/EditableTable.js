@@ -4,7 +4,6 @@ import "../syndrome.css";
 import ContentEditable from "react-contenteditable";
 
 class EditableTable extends React.Component {
-
     initialState = {
         taskList: [
             { id: 0, name: "clean my room", est: 30, category: "school" },
@@ -16,13 +15,13 @@ class EditableTable extends React.Component {
             est: '',
             category: '',
         },
-        currPosition: 0,
     }
 
     state = this.initialState;
     nextEdit = React.createRef();
 
     addRow = () => {
+        this.updateScroll();
         const { taskList, row } = this.state
         const fixedInput = {
             ...row,
@@ -61,6 +60,7 @@ class EditableTable extends React.Component {
     }
 
     deleteRow = id => {
+        this.updateScroll();
         this.setState(({ taskList }) => ({
             taskList: taskList.filter(item => id !== item.id)
         }))
@@ -101,15 +101,20 @@ class EditableTable extends React.Component {
     }
 
     focusOnEntireElement = () => {
-         this.nextEdit.current.scrollIntoView({ behavior: "smooth", block: "start" })
         setTimeout(() => {
             document.execCommand("selectAll", false, null)
-        }, 0)
-
-       
+        }, 0)  
     }
 
-    
+    componentDidUpdate(prevProps, prevState) {
+        this.updateScroll();
+        this.nextEdit.current.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+
+    updateScroll() {
+        let element = document.getElementById("current-row");
+        element.scrollTop = element.scrollHeight;
+    }
 
     render() {
         const { taskList, row: { name, category, est } } = this.state;
@@ -129,13 +134,13 @@ class EditableTable extends React.Component {
                         {taskList.map((row, i) => {
                             return (
                                 <tr key={row.id}>
-                                    <td className="narrow-cell">
+                                    <td className="narrow-cell" className={this.state.focused ? "focused": ""}>
                                         <ContentEditable
                                             html={row.name}
                                             data-column="name"
                                             data-row={i}
                                             className="content-editable"
-                                            onChange={this.handleUpdateRow}
+                                            onChange={this.handleUpdateRow, this.focusOnEntireElement}
                                             onPaste={this.fixPasteIssues}
                                             onKeyPress={this.disableEnterButton}
                                             onFocus={this.focusOnEntireElement} /></td>
@@ -167,7 +172,7 @@ class EditableTable extends React.Component {
                                 </tr>
                             )
                         })}
-                        <tr>
+                        <tr id="current-row">
                             <td className="narrow-cell">
                                 <ContentEditable
                                     html={name}
@@ -191,7 +196,7 @@ class EditableTable extends React.Component {
                                     onFocus={this.focusOnEntireElement}
                                 />
                             </td>
-                            <td className="narrow-cell">
+                            <td id="narrow-cell">
                                 <ContentEditable
                                     html={category}
                                     data-column="category"
