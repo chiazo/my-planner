@@ -10,7 +10,7 @@
 }
 
 .name-tag {
-    position: static;
+    position: relative;
     float: right;
     border: none;
     background-color: inherit;

@@ -51,6 +51,12 @@
 }
 
 .day-view {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: flex;
+}
+
+.header-day.row {
+    padding: 1rem;
+    margin: 1rem;
+    border-bottom: 2px solid rgb(206, 206, 206);
 }

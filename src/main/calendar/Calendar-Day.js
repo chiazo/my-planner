@@ -24,7 +24,8 @@ class CalendarDay extends React.Component {
     };
 
     renderHeader() {
-        const dateFormat = "EEEE | MMM d, yyyy";
+        const dateFormat = "EEEE | MMM d, yyyy |  h:mm a";
+        // const currTimeFormate = ""
 
         return (
             <div className="header-day row">
@@ -98,9 +99,6 @@ class CalendarDay extends React.Component {
         } else {
             div.style.backgroundColor = "";
         }
-
-        console.log(updatedHours);
-        console.log(updatedDivs);
     }
 
     containsHour = hour => {

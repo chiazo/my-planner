@@ -1,60 +1,85 @@
 import React from "react";
+
 // import "../syndrome.css";
 // import ContentEditable from "react-contenteditable";
+// import Task from "./Task";
 
 class TaskForm extends React.Component {
 
-    submitFormHandler = event => {
-        event.preventDefault();
-        console.log(this.refs.name.value);
+    state = {
+        currTaskName: "",
+        currTaskTime: 20,
+        currTaskCategory: "School",
+        tasks: []
+    }
+
+    handleSubmit = () => {
+        // event.preventDefault();
+        // // console.log(this.refs.name.value);
+        // // console.log(event.target.task-name.value)
+
+        console.log("Task Name: " + this.state.currTaskName);
+        console.log("Task Time: " + this.state.currTaskTime + " mins");
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // this.setState({
+        //     tasks: [...]
+        // })
+    }
+
+    handleTaskNameChange = e => {
+        this.setState({currTaskName: e.target.value});
+    }
+
+    handleTaskTimeChange = e => {
+        this.setState({currTaskTime: e.target.value});
+    }
+
+    handleTaskCategoryChange = e => {
+        this.setState({currTaskCategory: e.target.value});
     }
 
     render() {
+        const { currTaskName, currTaskTime, currTaskCategory } = this.state;
         return(
-            // <div className="form">
-            //     <form onSubmit={this.submitFormHandler}>
-            //         <div>
-            //             <input type="text" name="task-name" ref="task-name"/>
-            //         </div>
-            //     </form>
-            // </div>
-            <div class="table">
-                <div class="thead">
-                    <tr class="tr">
-                        <div class="td">Task Name</div>
-                        <div class="td">Est. Time (mins)</div>
-                        <div class="td">Category</div>
+            <div className="table">
+                <div className="thead">
+                    <tr className="tr">
+                        <div className="td">Task Name</div>
+                        <div className="td">Est. Time (mins)</div>
+                        <div className="td">Category</div>
                     </tr>
                 </div>
-                <div class="tbody">
-                    <form class="tr" id="task-form" method="post">
-                        <span class="td"><input type="text" placeholder="Task Name"/></span>
-                        <span class="td"><input type="number" value="20" placeholder="20 mins"/></span>
-                        <span class="td"><select>
+                <div className="tbody">
+                    <form className="tr" id="task-form">
+                        <span className="td"><input type="text" placeholder="Task Name" value={currTaskName} onChange={this.handleTaskNameChange}/></span>
+                        <span className="td"><input type="number" value="20" placeholder="20 mins" value={currTaskTime} onChange={this.handleTaskTimeChange}/></span>
+                        <span className="td"><select value={currTaskCategory} onChange={this.handleTaskCategoryChange}>
                             <option value="school" selected>School</option>
                             <option value="work">Work</option>
                             <option value="personal">Personal</option>
                         </select></span>
                     </form>
-                    <div class="tr">
-                        <span class="td"><input type="text" placeholder="Task Name"/></span>
-                        <span class="td"><input type="number" placeholder="20 mins"/></span>
-                        <span class="td"><select>
+                    <div className="tr">
+                        <span className="td"><input type="text" placeholder="Task Name"/></span>
+                        <span className="td"><input type="number" placeholder="20 mins"/></span>
+                        <span className="td"><select>
                             <option value="school" selected>School</option>
                             <option value="work">Work</option>
                             <option value="personal">Personal</option>
                         </select></span>
                     </div>
-                    <div class="tr">
-                        <span class="td"><input type="text" placeholder="Task Name"/></span>
-                        <span class="td"><input type="number" placeholder="20 mins"/></span>
-                        <span class="td"><select>
+                    <div className="tr">
+                        <span className="td"><input type="text" placeholder="Task Name"/></span>
+                        <span className="td"><input type="number" placeholder="20 mins"/></span>
+                        <span className="td"><select>
                             <option value="school" selected>School</option>
                             <option value="work">Work</option>
                             <option value="personal">Personal</option>
                         </select></span>
                     </div>
-                    <button type="submit" name="submit_b" id="submit_b" form="task-form">Submit!</button>
+                    <button type="button" name="submit_b" id="submit_b" onClick={this.handleSubmit} form="task-form">Submit!</button>
                 </div>
             </div>
         )

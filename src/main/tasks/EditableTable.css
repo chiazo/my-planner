@@ -1,0 +1,13 @@
+.content-editable {
+    padding: 1rem;
+    /* min-width: 2rem; */
+}
+
+.content-editable:hover {
+    background: #dddddd;
+}
+
+.content-editable:focus {
+    background: rgb(215, 241, 255);
+    outline: 0;
+}
