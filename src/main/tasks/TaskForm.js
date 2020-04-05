@@ -13,15 +13,6 @@ class TaskForm extends React.Component {
         tasks: []
     }
 
-    handleSubmit = () => {
-        // event.preventDefault();
-        // // console.log(this.refs.name.value);
-        // // console.log(event.target.task-name.value)
-
-        console.log("Task Name: " + this.state.currTaskName);
-        console.log("Task Time: " + this.state.currTaskTime + " mins");
-    }
-
     componentDidUpdate(prevProps, prevState) {
         // this.setState({
         //     tasks: [...]

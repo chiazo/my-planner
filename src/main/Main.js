@@ -6,9 +6,11 @@ import Landing from "./landing/Landing"
 class Main extends React.Component {
     render() {
         return(
-            <section className="main">
+                <section className="main">
+                
                 <Navigation/>
                 <Landing/>
+                
             </section>
         )
     }

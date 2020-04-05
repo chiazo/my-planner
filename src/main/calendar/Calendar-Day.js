@@ -47,28 +47,6 @@ class CalendarDay extends React.Component {
     }
 
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     const { divMap, currDate } = this.state;
-
-    //     if (prevProps.currDate) {
-    //         if (prevProps.currDate.toString() !== currDate.toString()) {
-    //             var divsToColor;
-    //             if (divMap.has(currDate.toString())) {
-    //                 divsToColor = divMap.get(currDate.toString());
-    //                 divsToColor.forEach(el => {
-    //                     el.style.backgroundColor = "#32a854";
-    //                 })
-    //             } else {
-    //                 const divElements = document.querySelectorAll(".color");
-    //                 divElements.forEach(el => {
-    //                     el.style.backgroundColor = "";
-    //                 })
-    //             }
-    //         }
-    //     }
-
-    // }
-
     onHourClick = (hour, div) => {
         var updatedHours = this.state.freeHours.concat(hour);
         var updatedDivs;
@@ -106,16 +84,6 @@ class CalendarDay extends React.Component {
     }
 
     changeDivColors = () => {
-        // if (this.state.divMap.has(this.state.currDate)) {
-        //     this.state.divMap.get(this.state.currDate).forEach(div => {
-        //         div.style.backgroundColor = "#7db3f0";
-        //     })
-        // } else {
-        //     this.state.allDivs.forEach(div => {
-        //         div.style.backgroundColor = "";
-        //     });
-        // }
-
         this.state.allDivs.forEach(d => {
             d.style.backgroundColor = "";
         })

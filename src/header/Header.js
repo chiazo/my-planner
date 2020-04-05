@@ -6,7 +6,7 @@ const Header = ({name}) => (
         <div>
         <div className="site-title">
         <h2 >my Planner</h2>
-        <h5 >optimize your day the easy way</h5>
+        <h6 >optimize your day the easy way</h6>
         </div>
         
         <div>

@@ -5,20 +5,18 @@ import ContentEditable from "react-contenteditable";
 
 class EditableTable extends React.Component {
     initialState = {
-        taskList: [
-            { id: 0, name: "clean my room", est: 30, category: "school" },
-            { id: 1, name: "wash my hair", est: 60, category: "work" },
-            { id: 2, name: "read my book", est: 120, category: "personal" },
-        ],
+        taskList: [],
         row: {
             name: '',
             est: '',
             category: '',
         },
+        
     }
 
     state = this.initialState;
     nextEdit = React.createRef();
+
 
     addRow = () => {
         this.updateScroll();
@@ -64,6 +62,8 @@ class EditableTable extends React.Component {
         this.setState(({ taskList }) => ({
             taskList: taskList.filter(item => id !== item.id)
         }))
+        // this.props.handleTaskSubmit(this.state.taskList);
+        // bug concerning submiting multiple times & deletion after submitting
     }
 
     handleEditableRow = event => {
@@ -140,7 +140,7 @@ class EditableTable extends React.Component {
                                             data-column="name"
                                             data-row={i}
                                             className="content-editable"
-                                            onChange={this.handleUpdateRow, this.focusOnEntireElement}
+                                            onChange={this.handleUpdateRow}
                                             onPaste={this.fixPasteIssues}
                                             onKeyPress={this.disableEnterButton}
                                             onFocus={this.focusOnEntireElement} /></td>
@@ -214,6 +214,7 @@ class EditableTable extends React.Component {
                         </tr>
                     </tbody>
                 </table>
+                <button type="button" name="submit_b" id="submit_b" onClick={() => this.props.handleTaskSubmit(this.state.taskList)} form="task-form">Submit!</button>
             </div>
         )
     }

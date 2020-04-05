@@ -253,7 +253,7 @@ h1 {
 }
 
 h4 {
-  padding: 20px;
+  padding: 10px;
 }
 
 :focus {
@@ -361,7 +361,7 @@ td {
 /* grid */
 .column {
   float: left;
-  padding: 30px;
+  padding: 0px;
   text-align: justify;
 }
 
@@ -436,6 +436,7 @@ td {
     width: calc(50% - 2rem);
     max-width: 100%;
     min-width: 150px;
+    height: 2rem;
   }
 
   .cell-3x3>.cell {
