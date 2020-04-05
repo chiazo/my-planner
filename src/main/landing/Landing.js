@@ -53,10 +53,15 @@ class Landing extends React.Component {
             <div className="landing">
                 {this.state.showTaskInput ?
                     <EditableTable handleTaskSubmit={this.handleTaskSubmit} /> : null}
-                {this.state.showTaskList ? <TaskList tasks={this.state.taskObjects} /> : null}
+                {/* {this.state.showTaskList ? <TaskList tasks={this.state.taskObjects} /> : null} */}
                 {this.state.showCalendar ?
-                    <div>
-                        <CalendarDay />
+                    <div className="wrapper">
+                        <div className="column">
+                            <CalendarDay />
+                        </div>
+                        <div className="column">
+                            <TaskList tasks={this.state.taskObjects} />
+                        </div>
                         <button type="button" name="submit_b" id="submit_b" onClick={this.handleSubmit} >Submit!</button>
                     </div>
                     : null}
