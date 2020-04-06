@@ -9,19 +9,16 @@ import RightArrow from "/Users/chiazo/my-planner/my-planner/src/icons/right_arro
 class CalendarDay extends React.Component {
     constructor(props) {
         super(props);
-        this.state.divMap.set(this.state.currDate, []);
+        this.props.divMap.set(this.props.currDate, []);
     }
+
     state = {
-        currMonth: new Date(),
-        currDate: new Date(),
-        currHour: new Date(),
         selectedHour: new Date(),
-        freeHours: [],
         restrictedHours: [],
+        currHour: new Date(),
         currDivs: [],
-        allDivs: [],
-        divMap: new Map()
-    };
+        currMonth: new Date(),
+    }
 
     renderHeader() {
         const dateFormat = "EEEE | MMM d, yyyy |  h:mm a";
@@ -35,7 +32,7 @@ class CalendarDay extends React.Component {
                 </div>
                 <div className="date header">
                     <span>
-                        {dateFns.format(this.state.currDate, dateFormat)}
+                        {dateFns.format(this.props.currDate, dateFormat)}
                     </span>
                 </div>
                 <div className="right-arr icon header"
@@ -47,64 +44,38 @@ class CalendarDay extends React.Component {
     }
 
 
-    onHourClick = (hour, div) => {
-        var updatedHours = this.state.freeHours.concat(hour);
-        var updatedDivs;
-        if (this.state.divMap.has(this.state.currDate)) {
-            updatedDivs = this.state.divMap.get(this.state.currDate).concat(div);
-        } else {
-            updatedDivs = [div];
-        }
-        var allKnownDivs = this.state.allDivs.concat(div);
+    // onHourClick = (hour, div) => {
+    //     var updatedHours = this.state.freeHours.concat(hour);
+    //     var updatedDivs;
+    //     if (this.state.divMap.has(this.state.currDate)) {
+    //         updatedDivs = this.state.divMap.get(this.state.currDate).concat(div);
+    //     } else {
+    //         updatedDivs = [div];
+    //     }
+    //     var allKnownDivs = this.state.allDivs.concat(div);
 
-        if (this.containsHour(hour)) {
-            updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
-            if (this.state.divMap.has(this.state.currDate)) {
-                updatedDivs = this.state.divMap.get(this.state.currDate).filter(item => item !== div);
-            }
-        }
+    //     if (this.containsHour(hour)) {
+    //         updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
+    //         if (this.state.divMap.has(this.state.currDate)) {
+    //             updatedDivs = this.state.divMap.get(this.state.currDate).filter(item => item !== div);
+    //         }
+    //     }
 
-        var newMap = this.state.divMap.set(this.state.currDate, updatedDivs);
+    //     var newMap = this.state.divMap.set(this.state.currDate, updatedDivs);
 
-        this.setState({
-            freeHours: updatedHours,
-            divMap: newMap,
-            allDivs: allKnownDivs
-        })
+    //     this.setState({
+    //         freeHours: updatedHours,
+    //         divMap: newMap,
+    //         allDivs: allKnownDivs
+    //     })
 
-        if (!div.style.backgroundColor) {
-            div.style.backgroundColor = "#7db3f0";
-        } else {
-            div.style.backgroundColor = "";
-        }
-    }
+    //     if (!div.style.backgroundColor) {
+    //         div.style.backgroundColor = "#7db3f0";
+    //     } else {
+    //         div.style.backgroundColor = "";
+    //     }
+    // }
 
-    containsHour = hour => {
-        return this.state.freeHours.some(item => item.getTime() === hour.getTime());
-    }
-
-    changeDivColors = () => {
-        this.state.allDivs.forEach(d => {
-            d.style.backgroundColor = "";
-        })
-    }
-
-
-    nextDay = () => {
-        this.setState({
-            currDate: dateFns.addDays(this.state.currDate, 1)
-        });
-
-        this.changeDivColors();
-    };
-
-    prevDay = () => {
-        this.setState({
-            currDate: dateFns.subDays(this.state.currDate, 1)
-        });
-
-        this.changeDivColors();
-    };
 
 
     render() {
@@ -113,7 +84,7 @@ class CalendarDay extends React.Component {
                 {this.renderHeader()}
                 <DayView currDate={dateFns.startOfDay(new Date())}
                     selectedHour={this.state.selectedHour}
-                    onHourClick={this.onHourClick.bind(this)} />
+                    onHourClick={this.props.onHourClick.bind(this)} />
                 {/* <div>Cells</div> */}
             </div>
         )

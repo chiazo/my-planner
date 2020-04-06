@@ -1,7 +1,10 @@
 .landing {
-    flex-basis: 75%;
+    /* flex-basis: 75%; */
     padding: 20px 0;
-    margin: 0;
+    /* margin-left: 250px; */
+    height: auto;
+    max-width: 100%;
+    z-index: 1;
 }
 
 .calendar-day div, col {

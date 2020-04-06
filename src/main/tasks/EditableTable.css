@@ -1,6 +1,8 @@
 .content-editable {
     padding: 1rem;
-    /* min-width: 2rem; */
+    min-width: 150px;
+    max-width: 100%;
+    
 }
 
 .content-editable:hover {
@@ -10,4 +12,13 @@
 .content-editable:focus {
     background: rgb(215, 241, 255);
     outline: 0;
+}
+
+table {
+    table-layout: fixed;
+    max-width: 100%;
+}
+
+td {
+    word-wrap: break-word;
 }

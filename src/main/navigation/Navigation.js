@@ -1,8 +1,7 @@
 import React from "react";
 import "./Navigation.css";
 
-class Navigation extends React.Component {
-    render() {
+const Navigation = () => {
         return (
             <div className="navigation row">
                 <section className="nav-day">
@@ -28,7 +27,7 @@ class Navigation extends React.Component {
                 </section>                           
             </div>
         )
-    }
+    
 }
 
 export default Navigation;

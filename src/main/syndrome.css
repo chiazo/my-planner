@@ -463,9 +463,12 @@ td {
 /* site title */
 .site-header {
   background-color: #ffffff;
+  grid-column: 1 / 3;
+  position: static;
   top: 10%;
   margin-top: 21px;
   z-index: 1000;
+  padding-left: 2rem;
   border-bottom: 2px solid #d7d6d6;
 }
 
