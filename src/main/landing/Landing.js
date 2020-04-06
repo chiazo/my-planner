@@ -8,14 +8,15 @@ import EditableTable from "../tasks/EditableTable";
 
 class Landing extends React.Component {
     state = {
-        taskObjects: [],
+        taskList: [],
         showTaskInput: true,
         showCalendar: false,
         showTaskList: false,
         freeHours: [],
         currDate: new Date(),
         allDivs: [],
-        divMap: new Map()
+        divMap: new Map(),
+        schedule: []
     }
 
     containsHour = hour => {
@@ -55,21 +56,17 @@ class Landing extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log(this.state.freeHours);
-    }
+    handleTaskSubmit = (tasks) => {
 
-    handleTaskSubmit = (taskList) => {
+        let { taskList } = this.state;
 
-        let { taskObjects } = this.state;
-
-        for (let task of taskList) {
-            if (taskObjects.indexOf(task) === -1) {
-                taskObjects.push(task);
+        for (let task of tasks) {
+            if (taskList.indexOf(task) === -1) {
+                taskList.push(task);
             }
         }
 
-        // console.log(taskObjects);
+        // console.log(taskList);
         this.setState({
             showTaskInput: false,
             showCalendar: true,
@@ -109,7 +106,75 @@ class Landing extends React.Component {
         // 1. loop through free hours
         // 2. add task to that hour 
         // 3. if not enough space, move onto next free hour
+        // schedule will be array of objects
 
+        const { freeHours, schedule, taskList } = this.state;
+
+        // mapping free hours to intial time & tasks
+        for (let hour of freeHours) {
+            // each object will have hour, availableTime, tasks
+            let currHour = {
+                hour: hour,
+                availableTime: 60,
+                tasks: []
+            };
+
+            let newSchedule = this.state.schedule;
+            newSchedule.push(currHour);
+            this.setState({
+                schedule: newSchedule
+            })
+        }
+
+        /**
+         * 
+         */
+
+
+
+        // filling schedule
+        let i = 0, numOfTasks = taskList.length;
+        let subTask, splitTask = false;
+        for (let hour of schedule) {
+            
+            let task = taskList[i];
+            if (hour.availableTime <= 0) continue;
+            if (!task) break;
+
+            while (hour.availableTime > 0 && i < numOfTasks) {
+                let task = (splitTask) ? subTask : taskList[i];
+                if (task.est <= hour.availableTime) {
+                    console.log()
+                    hour.tasks.push(task);
+                    hour.availableTime -= task.est;
+                    splitTask = false;
+                    i++;
+                    task = taskList[i];
+                } else {
+                    let leftOverTime = task.est - hour.availableTime;
+                    hour.tasks.push({
+                        name: task.name,
+                        est: hour.availableTime,
+                        category: task.category,
+                        id: task.id,
+                    });
+
+                    subTask = {
+                        name: task.name,
+                        est: leftOverTime,
+                        category: task.category,
+                        id: task.id,
+                    };
+                    splitTask = true;
+
+                    hour.availableTime -= hour.availableTime;
+                    break;
+                    // break;
+                }
+            }
+        }
+
+        console.log(schedule)
     }
 
     // goBack() { // back button
@@ -127,20 +192,20 @@ class Landing extends React.Component {
             <div className="landing">
                 {this.state.showTaskInput ?
                     <EditableTable handleTaskSubmit={this.handleTaskSubmit} /> : null}
-                {/* {this.state.showTaskList ? <TaskList tasks={this.state.taskObjects} /> : null} */}
+                {/* {this.state.showTaskList ? <TaskList tasks={this.state.taskList} /> : null} */}
                 {this.state.showCalendar ?
                     <div>
                         <div className="wrapper">
-                        <div className="column">
-                            <CalendarDay currDate={this.state.currDate}
-                            allDivs={this.state.allDivs} divMap={this.state.divMap}
-                            onHourClick={this.onHourClick.bind(this)}/>
+                            <div className="column">
+                                <CalendarDay currDate={this.state.currDate}
+                                    allDivs={this.state.allDivs} divMap={this.state.divMap}
+                                    onHourClick={this.onHourClick.bind(this)} />
+                            </div>
+                            <div className="column">
+                                <TaskList tasks={this.state.taskList} />
+                            </div>
                         </div>
-                        <div className="column">
-                            <TaskList tasks={this.state.taskObjects} />
-                        </div>
-                    </div>
-                    <button type="button" name="submit_b" id="submit_b" onClick={this.handleScheduleSubmit} >Submit!</button>
+                        <button type="button" name="submit_b" id="submit_b" onClick={this.handleScheduleSubmit.bind(this)} >Submit!</button>
                     </div>
                     : null}
 
