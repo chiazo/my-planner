@@ -416,7 +416,8 @@ td {
 }
 
 .cell {
-  margin: 1rem;
+  /* margin: 1rem; */
+  /* padding: 2rem; */
   /* border: 1px solid #444444; */
 }
 
@@ -437,6 +438,7 @@ td {
     max-width: 100%;
     min-width: 150px;
     height: 2rem;
+    text-align: center;
   }
 
   .cell-3x3>.cell {

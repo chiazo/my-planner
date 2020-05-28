@@ -3,15 +3,17 @@ import "./Landing.css";
 import CalendarDay from "../calendar/Calendar-Day";
 import TaskList from "../tasks/TaskList";
 import * as dateFns from "date-fns";
-// import TaskForm from "../tasks/TaskForm";
+import DaySchedule from "../calendar/DaySchedule";
 import EditableTable from "../tasks/EditableTable";
+
 
 class Landing extends React.Component {
     state = {
         taskList: [],
         showTaskInput: true,
-        showCalendar: false,
+        showInputCalendar: false,
         showTaskList: false,
+        showDaySchedule: false,
         freeHours: [],
         currDate: new Date(),
         allDivs: [],
@@ -20,7 +22,7 @@ class Landing extends React.Component {
     }
 
     containsHour = hour => {
-        return this.state.freeHours.some(item => item.getTime() === hour.getTime());
+        return this.state.freeHours.some(item => +item === +hour);
     }
 
 
@@ -35,7 +37,7 @@ class Landing extends React.Component {
         var allKnownDivs = this.state.allDivs.concat(div);
 
         if (this.containsHour(hour)) {
-            updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
+            updatedHours = this.state.freeHours.filter(item => +item !== +hour);
             if (this.state.divMap.has(this.state.currDate)) {
                 updatedDivs = this.state.divMap.get(this.state.currDate).filter(item => item !== div);
             }
@@ -69,7 +71,7 @@ class Landing extends React.Component {
         // console.log(taskList);
         this.setState({
             showTaskInput: false,
-            showCalendar: true,
+            showInputCalendar: true,
             showTaskList: true
         })
 
@@ -100,13 +102,11 @@ class Landing extends React.Component {
         this.changeDivColors();
     };
 
+    refresh() {
+        window.location.reload(false)
+    }
+
     handleScheduleSubmit() {
-        console.log("SCHEDULE LOADING");
-        // how to load schedule
-        // 1. loop through free hours
-        // 2. add task to that hour 
-        // 3. if not enough space, move onto next free hour
-        // schedule will be array of objects
 
         const { freeHours, schedule, taskList } = this.state;
 
@@ -114,7 +114,7 @@ class Landing extends React.Component {
         for (let hour of freeHours) {
             // each object will have hour, availableTime, tasks
             let currHour = {
-                hour: hour,
+                hour: hour.valueOf(),
                 availableTime: 60,
                 tasks: []
             };
@@ -125,12 +125,6 @@ class Landing extends React.Component {
                 schedule: newSchedule
             })
         }
-
-        /**
-         * 
-         */
-
-
 
         // filling schedule
         let i = 0, numOfTasks = taskList.length;
@@ -144,7 +138,6 @@ class Landing extends React.Component {
             while (hour.availableTime > 0 && i < numOfTasks) {
                 let task = (splitTask) ? subTask : taskList[i];
                 if (task.est <= hour.availableTime) {
-                    console.log()
                     hour.tasks.push(task);
                     hour.availableTime -= task.est;
                     splitTask = false;
@@ -174,18 +167,14 @@ class Landing extends React.Component {
             }
         }
 
-        console.log(schedule)
-    }
 
-    // goBack() { // back button
-    //     this.setState({
-    //         showTaskInput: true,
-    //         showCalendar: false,
-    //         showTaskList: false
-    //     })
-    //     console.log("um what is going on");
-    //     window.getSelection().removeAllRanges();
-    // }
+        this.setState({
+            showDaySchedule: true,
+            showInputCalendar: false,
+            showTaskList: false
+        })
+
+    }
 
     render() {
         return (
@@ -193,7 +182,7 @@ class Landing extends React.Component {
                 {this.state.showTaskInput ?
                     <EditableTable handleTaskSubmit={this.handleTaskSubmit} /> : null}
                 {/* {this.state.showTaskList ? <TaskList tasks={this.state.taskList} /> : null} */}
-                {this.state.showCalendar ?
+                {this.state.showInputCalendar ?
                     <div>
                         <div className="wrapper">
                             <div className="column">
@@ -208,6 +197,14 @@ class Landing extends React.Component {
                         <button type="button" name="submit_b" id="submit_b" onClick={this.handleScheduleSubmit.bind(this)} >Submit!</button>
                     </div>
                     : null}
+                    {this.state.showDaySchedule ?
+                    <div>
+                        <div className="wrapper">
+                        <div class="column">
+                        <DaySchedule schedule={this.state.schedule} />
+                        </div>
+                    </div> <button type="button" name="refresh_b" id="refresh_b" onClick={this.refresh.bind(this)} >End Session</button>
+                    </div> : null}
 
             </div>
         )

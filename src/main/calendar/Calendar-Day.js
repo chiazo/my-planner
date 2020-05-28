@@ -20,6 +20,11 @@ class CalendarDay extends React.Component {
         currMonth: new Date(),
     }
 
+    replaceText(e) {
+        const curr_val = e.target.textContent;
+        console.log(curr_val)
+    }
+
     renderHeader() {
         const dateFormat = "EEEE | MMM d, yyyy |  h:mm a";
         // const currTimeFormate = ""
@@ -43,49 +48,16 @@ class CalendarDay extends React.Component {
         );
     }
 
-
-    // onHourClick = (hour, div) => {
-    //     var updatedHours = this.state.freeHours.concat(hour);
-    //     var updatedDivs;
-    //     if (this.state.divMap.has(this.state.currDate)) {
-    //         updatedDivs = this.state.divMap.get(this.state.currDate).concat(div);
-    //     } else {
-    //         updatedDivs = [div];
-    //     }
-    //     var allKnownDivs = this.state.allDivs.concat(div);
-
-    //     if (this.containsHour(hour)) {
-    //         updatedHours = this.state.freeHours.filter(item => item.getTime() !== hour.getTime());
-    //         if (this.state.divMap.has(this.state.currDate)) {
-    //             updatedDivs = this.state.divMap.get(this.state.currDate).filter(item => item !== div);
-    //         }
-    //     }
-
-    //     var newMap = this.state.divMap.set(this.state.currDate, updatedDivs);
-
-    //     this.setState({
-    //         freeHours: updatedHours,
-    //         divMap: newMap,
-    //         allDivs: allKnownDivs
-    //     })
-
-    //     if (!div.style.backgroundColor) {
-    //         div.style.backgroundColor = "#7db3f0";
-    //     } else {
-    //         div.style.backgroundColor = "";
-    //     }
-    // }
-
-
-
     render() {
         return (
             <div className="calendar-day">
                 {this.renderHeader()}
                 <DayView currDate={dateFns.startOfDay(new Date())}
                     selectedHour={this.state.selectedHour}
-                    onHourClick={this.props.onHourClick.bind(this)} />
+                    onHourClick={this.props.onHourClick.bind(this)} 
+                    replaceText={this.replaceText.bind(this)}/>
                 {/* <div>Cells</div> */}
+                
             </div>
         )
     }
