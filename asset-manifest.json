@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/my-planner/static/css/main.ea9558ec.chunk.css",
+    "main.js": "/my-planner/static/js/main.f2128fea.chunk.js",
+    "main.js.map": "/my-planner/static/js/main.f2128fea.chunk.js.map",
+    "runtime-main.js": "/my-planner/static/js/runtime-main.fda17676.js",
+    "runtime-main.js.map": "/my-planner/static/js/runtime-main.fda17676.js.map",
+    "static/js/2.aeeccfc6.chunk.js": "/my-planner/static/js/2.aeeccfc6.chunk.js",
+    "static/js/2.aeeccfc6.chunk.js.map": "/my-planner/static/js/2.aeeccfc6.chunk.js.map",
+    "index.html": "/my-planner/index.html",
+    "precache-manifest.0fdab5e86e1f9a5a679b833018e7522d.js": "/my-planner/precache-manifest.0fdab5e86e1f9a5a679b833018e7522d.js",
+    "service-worker.js": "/my-planner/service-worker.js",
+    "static/css/main.ea9558ec.chunk.css.map": "/my-planner/static/css/main.ea9558ec.chunk.css.map",
+    "static/js/2.aeeccfc6.chunk.js.LICENSE.txt": "/my-planner/static/js/2.aeeccfc6.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fda17676.js",
+    "static/js/2.aeeccfc6.chunk.js",
+    "static/css/main.ea9558ec.chunk.css",
+    "static/js/main.f2128fea.chunk.js"
+  ]
+}
