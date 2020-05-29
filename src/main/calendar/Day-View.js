@@ -2,21 +2,17 @@ import React from "react";
 import * as dateFns from "date-fns";
 
 class DayView extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     // this.props.divMap.set(this.props.currDate, []);
-    // }
 
     state = {
         divs_to_text: new Map(),
         hours: [],
         keys: [],
         dayStart: this.props.currDate,
-        hour_to_divs: new Map()
+        task_text: ""
     }
 
     createView() {
-        const { hours, keys } = this.state;
+        const { hours, keys, divs_to_text } = this.state;
         const { onHourClick, currDate } = this.props;
 
         const dateFormat = "h a";
@@ -39,6 +35,7 @@ class DayView extends React.Component {
                         {formattedHour}
                     </div>)
                     keys.push(currHour.valueOf());
+                    divs_to_text.set(Number(currHour.valueOf()), "\u00A0\u00A0\u00A0\u00A0\u00A0")
                     currHour = dateFns.addHours(currHour, 1);
                 }
                 tempDay = dateFns.addHours(tempDay, 1);
@@ -50,64 +47,109 @@ class DayView extends React.Component {
                     if (i === 1) {
                         curr_div = <div className="row hour-cell cell color"
                             onClick={(e) => onHourClick(keys[j], e.currentTarget)} key={keys[j]}>
-                            &emsp;&emsp;&emsp;&emsp;&emsp;
-                </div>;
+                            {this.state.task_text}
+                        </div>;
 
                         cells.push(curr_div)
                     } else {
+
                         curr_div = <div className="row hour-cell cell color"
                             onClick={(e) => onHourClick(keys[j + 12], e.currentTarget)} key={keys[j + 12]}>
-                            &emsp;&emsp;&emsp;&emsp;&emsp;
-            </div>;
+                            {this.state.task_text}
+                        </div>;
                         cells.push(curr_div)
                     }
 
                 }
+
                 tempDay = dateFns.addHours(tempDay, 1);
                 hours.push(<div className="column" key={i + 4}>{cells}</div>)
                 cells = [];
             }
 
         }
+
+        this.scheduleCheck();
+    }
+
+    updateDiv(text, idx) {
+        const { keys} = this.state;
+        const { onHourClick } = this.props;
+        return (
+            <div className="row hour-cell cell color"
+                onClick={(e) => onHourClick(keys[idx], e.currentTarget)} key={keys[idx]}>
+                {text}
+            </div>
+        )
+    }
+
+    makeTaskList(arr) {
+        return (
+            <ul>
+                {arr.map(function(task, idx){
+                    return <li key={idx}>{task.name} - {task.est} mins</li>
+                })}
+            </ul>
+        )
     }
 
     scheduleCheck() {
-        const { hours, hour_to_divs } = this.state;
+        const { divs_to_text } = this.state;
         const { schedule } = this.props;
+        
         if (schedule) {
-            let all_divs = []
-            for (let hr of hours) {
-                if (hr.key % 2 !== 0) {
-                    let hour_divs = hr.props.children
-                    hour_divs.forEach(x => all_divs.push(x))
-                }
-            }
-
-            for (let div of all_divs) {
-                hour_to_divs.set(+div.key, div)
-            }
 
             for (let event of schedule) {
-                let div = hour_to_divs.get(+event.hour)
-                // let tasks = event.tasks;
-                // div.props.children = "HI"
-                console.log(div)
+                let tasks = event.tasks;
+                divs_to_text.set(Number(event.hour), this.makeTaskList(tasks))
             }
 
-
         }
+       
     }
 
-    componentWillMount() {
+    renderDivs() {
+        const { hours, divs_to_text } = this.state;
+    
+        let all_divs = []
+
+        for (const [index, div] of hours.entries()) {
+            if (index % 2 !== 0) {
+                let col = div.props.children;
+                all_divs = all_divs.concat(col)
+            } 
+        }
+
+        for (let i = 0; i < 24; i++) {
+            let curr_div = all_divs[i]
+            let text = divs_to_text.get(+curr_div.key)
+            if (typeof(text) === "object") {
+                console.log(text)
+                let hours_idx = 1, col_idx = i;
+                if (i > 11) {
+                    hours_idx = 3;
+                    col_idx -= 12;
+                }
+                let col = hours[hours_idx].props.children
+                col[col_idx] = this.updateDiv(text, i)
+            }
+        }
+
+        return hours;
+    }
+        
+
+    UNSAFE_componentWillMount() {
         this.createView();
     }
 
     render() {
-        const { hours } = this.state;
-        this.scheduleCheck()
+
         return (
             <div>
-                <div className="day-view">{hours}</div>
+                <div className="day-view">
+                    {this.renderDivs()} 
+                </div>
             </div>
         )
     }

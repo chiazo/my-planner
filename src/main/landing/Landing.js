@@ -200,7 +200,7 @@ class Landing extends React.Component {
                     {this.state.showDaySchedule ?
                     <div>
                         <div className="wrapper">
-                        <div class="column">
+                        <div className="column">
                         <DaySchedule schedule={this.state.schedule} />
                         </div>
                     </div> <button type="button" name="refresh_b" id="refresh_b" onClick={this.refresh.bind(this)} >End Session</button>
