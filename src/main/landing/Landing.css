@@ -1,5 +1,4 @@
 .landing {
-    /* flex-basis: 75%; */
     padding: 20px;
     margin: auto;
     height: auto;
@@ -17,15 +16,6 @@ h3 {
     margin: 0 0 1rem 0;
 }
 
-.calendar-day div, col {
-    text-align: center;
-    margin: 0;
-}
-
 .header-day {
     display: inline-block
-}
-
-.day-view {
-    display: table-row;
 }

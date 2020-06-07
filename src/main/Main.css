@@ -16,22 +16,15 @@ body {
 }
 
 /* grid */
-.column {
+/* .column {
     float: left;
     padding: 30px;
     text-align: justify;
-  }
+  } */
 
 .header {
     float: left;
     width: 100%;
-}
-
-
-.row::after {
-    content: "";
-    display: table;
-    clear: both;
 }
 
 .left-arr, .right-arr {
@@ -40,12 +33,6 @@ body {
 
 .date {
     width: 50%;
-}
-
-.row {
-    width: 100%;
-    border: 5px;
-    border-color: black;
 }
 
 .calendar-day {

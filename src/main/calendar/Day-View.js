@@ -31,7 +31,7 @@ class DayView extends React.Component {
             if (i % 2 === 0) {
                 for (let j = 0; j < 12; j++) {
                     formattedHour = dateFns.format(currHour, dateFormat);
-                    cells.push(<div className="row hour-cell cell" key={j + 1}>
+                    cells.push(<div className="individual hour-cell cell" key={j + 1}>
                         {formattedHour}
                     </div>)
                     keys.push(currHour.valueOf());
@@ -45,7 +45,7 @@ class DayView extends React.Component {
                 let curr_div;
                 for (let j = 0; j < 12; j++) {
                     if (i === 1) {
-                        curr_div = <div className="row hour-cell cell color"
+                        curr_div = <div className="individual hour-cell cell color"
                             onClick={(e) => onHourClick(keys[j], e.currentTarget)} key={keys[j]}>
                             {this.state.task_text}
                         </div>;
@@ -53,7 +53,7 @@ class DayView extends React.Component {
                         cells.push(curr_div)
                     } else {
 
-                        curr_div = <div className="row hour-cell cell color"
+                        curr_div = <div className="individual hour-cell cell color"
                             onClick={(e) => onHourClick(keys[j + 12], e.currentTarget)} key={keys[j + 12]}>
                             {this.state.task_text}
                         </div>;
@@ -137,9 +137,26 @@ class DayView extends React.Component {
             }
         }
 
-        console.log(hours)
+        let new_hours = [], i = 0;
 
-        return hours;
+        // 4 cols
+        // 12 rows -> col[0], col[1], col[2], col[3]
+        while (i < 12) {
+            let row;
+            let col1 = hours[0].props.children[i]
+            let col2 = hours[1].props.children[i]
+            let col3 = hours[2].props.children[i]
+            let col4 = hours[3].props.children[i]
+            row = [col1, col2, col3, col4]
+            let div_row = <div className="row">
+                {row}
+            </div>
+            new_hours.push(div_row);
+            i++;
+        }
+
+        // console.log(new_hours)
+        return new_hours;
     }
         
 
