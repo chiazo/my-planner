@@ -77,7 +77,7 @@ class DayView extends React.Component {
         const { onHourClick } = this.props;
         
         return (
-            <div className="row hour-cell cell color"
+            <div className="individual hour-cell cell color"
                 onClick={(e) => onHourClick(keys[idx], e.currentTarget)} key={keys[idx]}>
                 {text}
             </div>

@@ -238,11 +238,6 @@ h4 {
 }
 
 /* grid */
-/* .column {
-  float: left;
-  padding: 0px;
-  text-align: justify;
-} */
 
 .row {
   display: flex;
@@ -251,7 +246,7 @@ h4 {
 .individual {
   flex: 1;
   float: left;
-  width: 33.33%;
+  /* min-height: 100%; */
 }
 
 .row:after {
@@ -261,7 +256,7 @@ h4 {
 }
 
 ul {
-  /* margin:  .4rem .4rem .4rem; */
+  margin: 0;
   padding: .5rem;
   list-style: none;
   display: block;
@@ -271,7 +266,9 @@ ul {
   padding-inline-start: 0;
 }
 
-
+li {
+  margin: 10px;
+}
 
 @media screen and (max-width: 700px) {
   /* .column {
@@ -310,8 +307,9 @@ ul {
     width: calc(50% - 2rem);
     max-width: 100%;
     min-width: 200px;
-    height: 2rem;
+    min-height: 2rem;
     text-align: center;
+    border-top: 1px solid lightgray;
   }
 
 }
