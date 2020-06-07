@@ -1,10 +1,20 @@
 .landing {
     /* flex-basis: 75%; */
-    padding: 20px 0;
-    /* margin-left: 250px; */
+    padding: 20px;
+    margin: auto;
     height: auto;
     max-width: 100%;
     z-index: 1;
+}
+
+.task-list {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+h3 {
+    padding: 1rem 1rem 0 1rem;
+    margin: 0 0 1rem 0;
 }
 
 .calendar-day div, col {

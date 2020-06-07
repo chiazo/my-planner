@@ -75,6 +75,7 @@ class DayView extends React.Component {
     updateDiv(text, idx) {
         const { keys} = this.state;
         const { onHourClick } = this.props;
+        
         return (
             <div className="row hour-cell cell color"
                 onClick={(e) => onHourClick(keys[idx], e.currentTarget)} key={keys[idx]}>
@@ -84,13 +85,15 @@ class DayView extends React.Component {
     }
 
     makeTaskList(arr) {
-        return (
-            <ul>
-                {arr.map(function(task, idx){
-                    return <li key={idx}>{task.name} - {task.est} mins</li>
-                })}
-            </ul>
-        )
+        if (arr.length !== 0) {
+            return (
+                <ul>
+                    {arr.map(function(task, idx){
+                        return <li key={idx}>{task.name} - {task.est} mins</li>
+                    })}
+                </ul>
+            )
+        }
     }
 
     scheduleCheck() {
@@ -124,7 +127,6 @@ class DayView extends React.Component {
             let curr_div = all_divs[i]
             let text = divs_to_text.get(+curr_div.key)
             if (typeof(text) === "object") {
-                console.log(text)
                 let hours_idx = 1, col_idx = i;
                 if (i > 11) {
                     hours_idx = 3;
@@ -134,6 +136,8 @@ class DayView extends React.Component {
                 col[col_idx] = this.updateDiv(text, i)
             }
         }
+
+        console.log(hours)
 
         return hours;
     }

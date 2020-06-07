@@ -8,7 +8,7 @@ class Main extends React.Component {
         return(
                 <section className="main">
                 
-                <Navigation/>
+                {/* <Navigation/> */}
                 <Landing/>
                 
             </section>

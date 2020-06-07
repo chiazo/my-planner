@@ -191,6 +191,7 @@ class Landing extends React.Component {
                                     onHourClick={this.onHourClick.bind(this)} />
                             </div>
                             <div className="column">
+                                <h3>Task List:</h3>
                                 <TaskList tasks={this.state.taskList} />
                             </div>
                         </div>
