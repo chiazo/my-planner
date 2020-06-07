@@ -11,7 +11,7 @@ A web app that creates a daily schedule based on inputed tasks and their estimat
 [Chiazo Agina](https://chiazo.github.io)
 
 ## Acknowledgments + Credits
-* [A great content editable tutorial](https://www.taniarascia.com/content-editable-elements-in-javascript-react/) 
+* [A great content editable tutorial](https://www.taniarascia.com/content-editable-elements-in-javascript-react/) by Tania Rascia
 
 ## License
 
